@@ -45,6 +45,8 @@
 
   .container { max-width:900px; margin:0 auto; padding:22px 20px; }
   .section { margin-bottom:44px; scroll-margin-top:100px; position:relative; }
+  .section::after { content:'© Daria Talanova'; display:block; text-align:center; margin-top:10px;
+    font-size:11px; letter-spacing:.4px; color:rgba(124,107,184,.55); }
   .section-title { font-size:22px; color:var(--purple); margin-bottom:6px; display:flex; align-items:center; gap:12px;
     padding-bottom:10px; border-bottom:2px solid var(--purple-light); }
   .section-title .num { background:var(--purple); color:#fff; width:36px; height:36px; border-radius:50%;
@@ -68,6 +70,9 @@
   .btn-check:hover { background:var(--teal-dark); transform:translateY(-1px); }
   .btn-resetcard { background:var(--coral-light); color:var(--coral-dark); }
   .btn-resetcard:hover { background:var(--coral); color:#fff; }
+  .btn-showanswers { background:#f0eef8; color:var(--purple); border:1.5px solid var(--purple-light); }
+  .btn-showanswers:hover { background:var(--purple-light); transform:translateY(-1px); }
+  .btn-showanswers.active { background:var(--purple); color:#fff; border-color:var(--purple); }
   .card-score { margin-left:auto; font-weight:800; font-size:13px; color:var(--purple); }
   .card-score.good { color:var(--success); }
   .card-score.bad { color:var(--error); }
@@ -99,20 +104,35 @@
   .dz .chip { font-size:12.5px; padding:3px 10px; }
   .dz.correct { background:#e8f5e8; border-color:var(--success); border-style:solid; }
   .dz.incorrect { background:#fbe9e7; border-color:var(--error); border-style:solid; }
-  .dz .expected { display:none; position:absolute; top:100%; left:0; background:var(--success); color:#fff; padding:3px 8px;
-    border-radius:6px; font-size:11px; font-weight:700; white-space:nowrap; margin-top:4px; z-index:10; }
-  .dz.incorrect:hover .expected { display:block; }
 
-  /* Written blanks (Audio) + green correct-answer chip */
+  /* ===== ANSWER KEY (shown on demand) ===== */
+  .answer-key {
+    display:inline-block; margin-left:6px;
+    background:var(--success); color:#fff;
+    padding:3px 9px; border-radius:6px;
+    font-size:11.5px; font-weight:800;
+    white-space:nowrap; vertical-align:middle;
+    box-shadow:0 2px 6px rgba(92,184,92,.35);
+    animation: popIn .25s ease;
+  }
+  @keyframes popIn {
+    from { opacity:0; transform:scale(.8); }
+    to { opacity:1; transform:scale(1); }
+  }
+  .match-target .answer-key { margin-left:auto; font-size:10.5px; padding:2px 7px; }
+  .option.answer-revealed {
+    border:2px solid var(--success);
+    background:#e8f5e8;
+    color:var(--teal-dark);
+    font-weight:800;
+  }
+
   .blank { width:120px; border:none; border-bottom:2px solid var(--teal); background:transparent;
     font:inherit; font-size:13.5px; font-weight:700; color:var(--ink); outline:none; text-align:center;
-    padding:2px 4px; border-radius:4px 4px 0 0; vertical-align:middle; }
+    padding:2px 4px; border-radius:4px 4px 0 0; vertical-align:baseline; }
   .blank:focus { background:var(--teal-light); }
   .blank.correct { border-color:var(--success); background:#e8f5e8; color:var(--teal-dark); }
   .blank.incorrect { border-color:var(--error); background:#fbe9e7; }
-  .blank-hint { display:none; margin-left:5px; background:var(--success); color:#fff; padding:2px 9px; border-radius:6px;
-    font-size:11px; font-weight:800; white-space:nowrap; vertical-align:middle; box-shadow:0 2px 6px rgba(92,184,92,.35); }
-  .blank.incorrect + .blank-hint { display:inline-block; }
 
   .options { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
   .option { background:#fff; border:1.5px solid var(--purple-light); padding:5px 14px; border-radius:999px; cursor:pointer;
@@ -132,7 +152,7 @@
   .match-item.matched { display:none; }
   .match-item.ghost { position:fixed; pointer-events:none; z-index:1000; display:block; box-shadow:0 8px 24px rgba(0,0,0,.2); }
   .match-target { background:#fff; border:2px dashed var(--purple); padding:9px 13px; border-radius:10px; margin-bottom:8px;
-    min-height:42px; font-size:12.5px; display:flex; align-items:center; justify-content:space-between; gap:8px; transition:all .2s; }
+    min-height:42px; font-size:12.5px; display:flex; align-items:center; justify-content:space-between; gap:8px; transition:all .2s; flex-wrap:wrap; }
   .match-target .term { font-weight:700; color:var(--purple); }
   .match-target.drag-over { background:var(--purple-light); border-style:solid; }
   .match-target.filled { background:var(--purple-light); border-style:solid; }
@@ -140,7 +160,6 @@
   .match-target.correct { background:#e8f5e8; border-color:var(--success); }
   .match-target.incorrect { background:#fbe9e7; border-color:var(--error); }
 
-  /* Type-with-hint (Revision) + green correct-answer chip */
   .hint-input { display:inline-flex; align-items:center; margin:0 3px; vertical-align:middle; }
   .hint-input .first-letter { background:var(--purple); color:#fff; font-weight:800; padding:4px 8px; border-radius:6px 0 0 6px; font-size:14px; }
   .hint-input input { border:2px solid var(--purple-light); border-left:none; border-radius:0 6px 6px 0; padding:4px 8px;
@@ -148,9 +167,6 @@
   .hint-input input:focus { border-color:var(--purple); }
   .hint-input.correct input { border-color:var(--success); background:#e8f5e8; }
   .hint-input.incorrect input { border-color:var(--error); background:#fbe9e7; }
-  .correct-answer { display:none; margin-left:5px; background:var(--success); color:#fff; padding:2px 9px; border-radius:6px;
-    font-size:11px; font-weight:800; white-space:nowrap; vertical-align:middle; box-shadow:0 2px 6px rgba(92,184,92,.35); }
-  .hint-input.incorrect + .correct-answer { display:inline-block; }
 
   details.text-details { background:var(--soft); border-radius:12px; padding:6px 14px; border:1.5px solid var(--purple-light); }
   details.text-details summary { cursor:pointer; font-weight:800; color:var(--purple); padding:8px 0; font-size:14.5px; }
@@ -160,12 +176,15 @@
   b.v { color:var(--purple); }
 
   .actions { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,.96); backdrop-filter:blur(12px);
-    padding:12px 20px; display:flex; justify-content:center; gap:12px; border-top:1px solid var(--purple-light);
-    box-shadow:0 -4px 16px rgba(124,107,184,.1); z-index:100; }
+    padding:12px 20px; display:flex; justify-content:center; gap:10px; border-top:1px solid var(--purple-light);
+    box-shadow:0 -4px 16px rgba(124,107,184,.1); z-index:100; flex-wrap:wrap; }
   .btn-primary { background:var(--purple); color:#fff; }
   .btn-primary:hover { background:var(--purple-dark); transform:translateY(-2px); }
   .btn-secondary { background:var(--coral-light); color:var(--coral-dark); }
   .btn-secondary:hover { background:var(--coral); color:#fff; }
+  .btn-tertiary { background:#f0eef8; color:var(--purple); border:1.5px solid var(--purple-light); }
+  .btn-tertiary:hover { background:var(--purple-light); transform:translateY(-2px); }
+  .btn-tertiary.active { background:var(--purple); color:#fff; border-color:var(--purple); }
 
   .result-banner { display:none; padding:18px; border-radius:16px; margin:0 0 22px; text-align:center; font-weight:800; font-size:17px; }
   .result-banner.show { display:block; animation:slideIn .5s ease; }
@@ -390,6 +409,7 @@
       <div class="sentence">10. To broaden your perspective, you need to be <span class="dz" data-answer="exposed"></span> to ideas that challenge your own.</div>
       <div class="card-actions">
         <button class="btn btn-check btn-small" data-card="v3-1">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="v3-1">👁 Show answers</button>
         <button class="btn btn-resetcard btn-small" data-card="v3-1">↻ Reset</button>
         <span class="card-score" data-score="v3-1"></span>
       </div>
@@ -422,6 +442,7 @@
       </div>
       <div class="card-actions">
         <button class="btn btn-check btn-small" data-card="v4-1">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="v4-1">👁 Show answers</button>
         <button class="btn btn-resetcard btn-small" data-card="v4-1">↻ Reset</button>
         <span class="card-score" data-score="v4-1"></span>
       </div>
@@ -443,6 +464,7 @@
         <div class="options"><div class="option" data-value="in">in</div><div class="option" data-value="at">at</div><div class="option" data-value="off">off</div></div></div>
       <div class="card-actions">
         <button class="btn btn-check btn-small" data-card="v5-1">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="v5-1">👁 Show answers</button>
         <button class="btn btn-resetcard btn-small" data-card="v5-1">↻ Reset</button>
         <span class="card-score" data-score="v5-1"></span>
       </div>
@@ -453,25 +475,26 @@
     <div class="section-title"><span class="num">3</span> Audio</div>
     <div class="card" data-task="typeblank" data-id="a1-1">
       <h3>1.1 Watch the videos and fill in the gaps — type the missing words</h3>
-      <div class="instruction">💡 Open each clip, listen, and type the missing word(s) into the blanks. No word bank — rely on your ear! Wrong blanks turn red and show the correct answer in green next to them.</div>
+      <div class="instruction">💡 Open each clip, listen, and type the missing word(s) into the blanks. No word bank — rely on your ear!</div>
 
       <div class="links" style="margin:0 0 8px"><a href="https://drive.google.com/file/d/15iGAtw2DsPSLx9g5uPJcoNynHHAS0nTO/preview" target="_blank">▶ Part 1</a></div>
-      <div class="sentence">- Well, we're very different. And we grew up very differently. And I think that we're just having trouble <input class="blank" data-answer="navigating"><span class="blank-hint">navigating</span> <input class="blank" data-answer="through"><span class="blank-hint">through</span> that. But we love each other. And we want to fix this.<br>- Do you?<br>- Do I love her? Yes.<br>- Want to fix this.<br>- I just don't know if these are things that can be fixed.</div>
+      <div class="sentence">- Well, we're very different. And we grew up very differently. And I think that we're just having trouble <input class="blank" data-answer="navigating"> <input class="blank" data-answer="through"> that. But we love each other. And we want to fix this.<br>- Do you?<br>- Do I love her? Yes.<br>- Want to fix this.<br>- I just don't know if these are things that can be fixed.</div>
 
       <div class="links" style="margin:12px 0 8px"><a href="https://drive.google.com/file/d/1iETLdaz1qmaT6WOZPFcv31B8NEfdYJH_/preview" target="_blank">▶ Part 2</a></div>
-      <div class="sentence">- If you're doing nothing wrong, what is there to fear?<br>- I'm fearing your definition of wrong.<br>- These are dangerous times.<br>- Dangerous times?<br>- Are they not?<br>- Do you feel <input class="blank" data-answer="under"><span class="blank-hint">under</span> <input class="blank" data-answer="threat"><span class="blank-hint">threat</span>?<br>- Personally? Here, yes.<br>- I'm at great risk of ingesting too much of this nourishing Chandrilan hospitality.</div>
+      <div class="sentence">- If you're doing nothing wrong, what is there to fear?<br>- I'm fearing your definition of wrong.<br>- These are dangerous times.<br>- Dangerous times?<br>- Are they not?<br>- Do you feel <input class="blank" data-answer="under"> <input class="blank" data-answer="threat">?<br>- Personally? Here, yes.<br>- I'm at great risk of ingesting too much of this nourishing Chandrilan hospitality.</div>
 
       <div class="links" style="margin:12px 0 8px"><a href="https://drive.google.com/file/d/14FlMGg-zyyA96QEij4ZhkFvXbaR_i4OB/preview" target="_blank">▶ Part 3</a></div>
-      <div class="sentence">- We thought you might have left for good.<br>- And would that be good?<br>- I visited your sister to ask where you were. Three days and not a word? Did you think it would <input class="blank" data-answer="go"><span class="blank-hint">go</span> <input class="blank" data-answer="unnoticed"><span class="blank-hint">unnoticed</span>? The Company have men in every tavern asking where you are. They're offering £10 to anyone with information. Making threats. Money being offered... It's only a matter of time, James.</div>
+      <div class="sentence">- We thought you might have left for good.<br>- And would that be good?<br>- I visited your sister to ask where you were. Three days and not a word? Did you think it would <input class="blank" data-answer="go"> <input class="blank" data-answer="unnoticed">? The Company have men in every tavern asking where you are. They're offering £10 to anyone with information. Making threats. Money being offered... It's only a matter of time, James.</div>
 
       <div class="links" style="margin:12px 0 8px"><a href="https://drive.google.com/file/d/18tZ-eoyOcABuSYf2vl3UZXolYKMl0a19/preview" target="_blank">▶ Part 4</a></div>
-      <div class="sentence">- You're okay. We got you.<br>- Bag.<br>- We got you.<br>- More warming blankets over here!<br>- You didn't have to <input class="blank" data-answer="suppress"><span class="blank-hint">suppress</span> it <input class="blank" data-answer="to"><span class="blank-hint">to</span> such an <input class="blank" data-answer="extreme"><span class="blank-hint">extreme</span>. Jumping into a pool of chemicals just to crush me.<br>- I'm gonna go check on the rest of those kids.</div>
+      <div class="sentence">- You're okay. We got you.<br>- Bag.<br>- We got you.<br>- More warming blankets over here!<br>- You didn't have to <input class="blank" data-answer="suppress"> it <input class="blank" data-answer="to"> such an <input class="blank" data-answer="extreme">. Jumping into a pool of chemicals just to crush me.<br>- I'm gonna go check on the rest of those kids.</div>
 
       <div class="links" style="margin:12px 0 8px"><a href="https://drive.google.com/file/d/1am2X8SVT_sWJGWnWM_KnKxcufAiKednO/preview" target="_blank">▶ Part 5</a></div>
-      <div class="sentence">- So what were they doing that we're not?<br>- We took this tech from Straal's lab on the Glenn. It was an augmentation to their navigation system. I've <input class="blank" data-answer="incorporated"><span class="blank-hint">incorporated</span> it <input class="blank" data-answer="into"><span class="blank-hint">into</span> our drive unit, but it won't load completely. To function optimally, it would appear to require some kind of supercomputer.<br>- You must have missed that on the Glenn.</div>
+      <div class="sentence">- So what were they doing that we're not?<br>- We took this tech from Straal's lab on the Glenn. It was an augmentation to their navigation system. I've <input class="blank" data-answer="incorporated"> it <input class="blank" data-answer="into"> our drive unit, but it won't load completely. To function optimally, it would appear to require some kind of supercomputer.<br>- You must have missed that on the Glenn.</div>
 
       <div class="card-actions">
         <button class="btn btn-check btn-small" data-card="a1-1">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="a1-1">👁 Show answers</button>
         <button class="btn btn-resetcard btn-small" data-card="a1-1">↻ Reset</button>
         <span class="card-score" data-score="a1-1"></span>
       </div>
@@ -483,22 +506,23 @@
 
     <div class="card" data-task="typehint" data-id="r1-1">
       <h3>1.1 Complete the gaps — type the word (first letter given)</h3>
-      <div class="sentence">1. There are many complex factors at <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="play"></span><span class="correct-answer">play</span> in the economy's downturn.</div>
-      <div class="sentence">2. The chameleon can <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="blend"></span><span class="correct-answer">blend</span> into its surroundings to hide from predators.</div>
-      <div class="sentence">3. The <span class="hint-input"><span class="first-letter">l</span><input type="text" data-answer="likeability"></span><span class="correct-answer">likeability</span> of the main character made the movie a joy to watch.</div>
-      <div class="sentence">4. Her wisdom helped her <span class="hint-input"><span class="first-letter">n</span><input type="text" data-answer="navigate"></span><span class="correct-answer">navigate</span> through life's many challenges.</div>
-      <div class="sentence">5. He changed his style of dress just to <span class="hint-input"><span class="first-letter">f</span><input type="text" data-answer="fit"></span><span class="correct-answer">fit</span> in with the new crowd.</div>
-      <div class="sentence">6. Don't worry about the presentation; I have your <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="back"></span><span class="correct-answer">back</span> if you forget any data.</div>
-      <div class="sentence">7. The coastal village is under <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="threat"></span><span class="correct-answer">threat</span> of flooding from the rising seas.</div>
-      <div class="sentence">8. After sharing her personal story, she began to feel <span class="hint-input"><span class="first-letter">v</span><input type="text" data-answer="vulnerable"></span><span class="correct-answer">vulnerable</span>.</div>
-      <div class="sentence">9. Children should be <span class="hint-input"><span class="first-letter">e</span><input type="text" data-answer="exposed"></span><span class="correct-answer">exposed</span> to different cultures and ideas.</div>
-      <div class="sentence">10. Despite his shyness, he comes <span class="hint-input"><span class="first-letter">a</span><input type="text" data-answer="across"></span><span class="correct-answer">across</span> as very confident in interviews.</div>
-      <div class="sentence">11. Her hard work often goes <span class="hint-input"><span class="first-letter">u</span><input type="text" data-answer="unnoticed"></span><span class="correct-answer">unnoticed</span> by her supervisors.</div>
-      <div class="sentence">12. It's hard to <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="pinpoint"></span><span class="correct-answer">pinpoint</span> the exact moment when their relationship changed.</div>
-      <div class="sentence">13. He tried to <span class="hint-input"><span class="first-letter">s</span><input type="text" data-answer="suppress"></span><span class="correct-answer">suppress</span> a laugh during the serious meeting.</div>
-      <div class="sentence">14. After the stressful project ended, the team could finally return to their <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="true"></span><span class="correct-answer">true</span> selves.</div>
+      <div class="sentence">1. There are many complex factors at <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="play"></span> in the economy's downturn.</div>
+      <div class="sentence">2. The chameleon can <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="blend"></span> into its surroundings to hide from predators.</div>
+      <div class="sentence">3. The <span class="hint-input"><span class="first-letter">l</span><input type="text" data-answer="likeability"></span> of the main character made the movie a joy to watch.</div>
+      <div class="sentence">4. Her wisdom helped her <span class="hint-input"><span class="first-letter">n</span><input type="text" data-answer="navigate"></span> through life's many challenges.</div>
+      <div class="sentence">5. He changed his style of dress just to <span class="hint-input"><span class="first-letter">f</span><input type="text" data-answer="fit"></span> in with the new crowd.</div>
+      <div class="sentence">6. Don't worry about the presentation; I have your <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="back"></span> if you forget any data.</div>
+      <div class="sentence">7. The coastal village is under <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="threat"></span> of flooding from the rising seas.</div>
+      <div class="sentence">8. After sharing her personal story, she began to feel <span class="hint-input"><span class="first-letter">v</span><input type="text" data-answer="vulnerable"></span>.</div>
+      <div class="sentence">9. Children should be <span class="hint-input"><span class="first-letter">e</span><input type="text" data-answer="exposed"></span> to different cultures and ideas.</div>
+      <div class="sentence">10. Despite his shyness, he comes <span class="hint-input"><span class="first-letter">a</span><input type="text" data-answer="across"></span> as very confident in interviews.</div>
+      <div class="sentence">11. Her hard work often goes <span class="hint-input"><span class="first-letter">u</span><input type="text" data-answer="unnoticed"></span> by her supervisors.</div>
+      <div class="sentence">12. It's hard to <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="pinpoint"></span> the exact moment when their relationship changed.</div>
+      <div class="sentence">13. He tried to <span class="hint-input"><span class="first-letter">s</span><input type="text" data-answer="suppress"></span> a laugh during the serious meeting.</div>
+      <div class="sentence">14. After the stressful project ended, the team could finally return to their <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="true"></span> selves.</div>
       <div class="card-actions">
         <button class="btn btn-check btn-small" data-card="r1-1">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="r1-1">👁 Show answers</button>
         <button class="btn btn-resetcard btn-small" data-card="r1-1">↻ Reset</button>
         <span class="card-score" data-score="r1-1"></span>
       </div>
@@ -533,6 +557,7 @@
       </div>
       <div class="card-actions">
         <button class="btn btn-check btn-small" data-card="r3-1">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="r3-1">👁 Show answers</button>
         <button class="btn btn-resetcard btn-small" data-card="r3-1">↻ Reset</button>
         <span class="card-score" data-score="r3-1"></span>
       </div>
@@ -606,6 +631,7 @@
 
 <div class="actions">
   <button class="btn btn-primary" id="checkBtn">✓ Check all answers</button>
+  <button class="btn btn-tertiary" id="showAllBtn">👁 Show all answers</button>
   <button class="btn btn-secondary" id="resetBtn">↻ Reset all</button>
 </div>
 
@@ -708,13 +734,18 @@ document.addEventListener('click',(e)=>{
   }
 });
 
+/* ================= EVALUATION ================= */
 const norm=s=>(s||'').trim().toLowerCase();
 const cardResults={};
+
 function clearCard(card){
-  card.querySelectorAll('.dz,.hint-input,.option,.match-target,.chip,.blank').forEach(el=>el.classList.remove('correct','incorrect'));
-  card.querySelectorAll('.expected').forEach(el=>el.remove());
-  card.classList.remove('correct','incorrect');
+  card.querySelectorAll('.dz,.hint-input,.option,.match-target,.chip,.blank').forEach(el=>el.classList.remove('correct','incorrect','answer-revealed'));
+  card.querySelectorAll('.answer-key').forEach(el=>el.remove());
+  card.classList.remove('correct','incorrect','show-answers');
+  const btn=card.querySelector('.btn-showanswers');
+  if(btn){btn.classList.remove('active');btn.textContent='👁 Show answers';}
 }
+
 function evaluateCard(card){
   clearCard(card);
   let correct=0,total=0;
@@ -724,10 +755,7 @@ function evaluateCard(card){
       total++;
       const chip=dz.querySelector('.chip');
       if(chip&&chip.dataset.word===dz.dataset.answer){dz.classList.add('correct');chip.classList.add('correct');correct++;}
-      else{
-        dz.classList.add('incorrect');if(chip)chip.classList.add('incorrect');
-        const exp=document.createElement('span');exp.className='expected';exp.textContent='✓ '+dz.dataset.answer;dz.appendChild(exp);
-      }
+      else{dz.classList.add('incorrect');if(chip)chip.classList.add('incorrect');}
     });
   }else if(task==='radio'){
     card.querySelectorAll('.dz-radio[data-answer]').forEach(dz=>{
@@ -739,7 +767,6 @@ function evaluateCard(card){
       }else{
         dz.classList.add('incorrect');
         if(dz.dataset.selected)sent.querySelector('.option[data-value="'+dz.dataset.selected+'"]')?.classList.add('incorrect');
-        sent.querySelector('.option[data-value="'+dz.dataset.answer+'"]')?.classList.add('correct');
       }
     });
   }else if(task==='match'){
@@ -769,6 +796,50 @@ function evaluateCard(card){
   if(sc){sc.textContent='✓ '+correct+' / '+total;sc.className='card-score '+(correct===total?'good':'bad');}
   updateGlobal();
 }
+
+/* ================= SHOW / HIDE ANSWERS ================= */
+function showAnswers(card){
+  hideAnswers(card);
+  const task=card.dataset.task;
+  if(task==='dragfill'){
+    card.querySelectorAll('.dz[data-answer]').forEach(dz=>{
+      const exp=document.createElement('span');
+      exp.className='answer-key';exp.textContent='✓ '+dz.dataset.answer;
+      dz.appendChild(exp);
+    });
+  }else if(task==='radio'){
+    card.querySelectorAll('.dz-radio[data-answer]').forEach(dz=>{
+      const sent=dz.closest('.sentence');
+      const correct=sent.querySelector('.option[data-value="'+dz.dataset.answer+'"]');
+      if(correct)correct.classList.add('answer-revealed');
+    });
+  }else if(task==='match'){
+    card.querySelectorAll('.match-target[data-answer]').forEach(mt=>{
+      const exp=document.createElement('span');
+      exp.className='answer-key';exp.textContent='→ '+mt.dataset.answer;
+      mt.appendChild(exp);
+    });
+  }else if(task==='typehint'){
+    card.querySelectorAll('.hint-input input[data-answer]').forEach(inp=>{
+      const exp=document.createElement('span');
+      exp.className='answer-key';exp.textContent='✓ '+inp.dataset.answer;
+      inp.closest('.hint-input').appendChild(exp);
+    });
+  }else if(task==='typeblank'){
+    card.querySelectorAll('input.blank[data-answer]').forEach(inp=>{
+      const exp=document.createElement('span');
+      exp.className='answer-key';exp.textContent='✓ '+inp.dataset.answer;
+      inp.parentElement.insertBefore(exp,inp.nextSibling);
+    });
+  }
+  card.classList.add('show-answers');
+}
+function hideAnswers(card){
+  card.querySelectorAll('.answer-key').forEach(el=>el.remove());
+  card.querySelectorAll('.answer-revealed').forEach(el=>el.classList.remove('answer-revealed'));
+  card.classList.remove('show-answers');
+}
+
 function resetCard(card){
   clearCard(card);
   card.querySelectorAll('.dz .chip').forEach(chip=>{chip.innerHTML=chip.dataset.word;card.querySelector('.bank').appendChild(chip);});
@@ -796,8 +867,23 @@ function updateGlobal(){
   document.getElementById('progressFill').style.width=(t?Math.round(c/t*100):0)+'%';
 }
 function getCard(id){return document.querySelector('.card[data-id="'+id+'"]');}
+
 document.querySelectorAll('.btn-check').forEach(b=>b.addEventListener('click',()=>evaluateCard(getCard(b.dataset.card))));
 document.querySelectorAll('.btn-resetcard').forEach(b=>b.addEventListener('click',()=>resetCard(getCard(b.dataset.card))));
+document.querySelectorAll('.btn-showanswers').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const card=getCard(b.dataset.card);
+    if(card.classList.contains('show-answers')){
+      hideAnswers(card);
+      b.classList.remove('active');
+      b.textContent='👁 Show answers';
+    }else{
+      showAnswers(card);
+      b.classList.add('active');
+      b.textContent='👁 Hide answers';
+    }
+  });
+});
 
 const banner=document.getElementById('resultBanner');
 document.getElementById('checkBtn').addEventListener('click',()=>{
@@ -809,14 +895,39 @@ document.getElementById('checkBtn').addEventListener('click',()=>{
   const pct=t?Math.round(c/t*100):0;
   banner.className='result-banner show '+(pct>=90?'excellent':pct>=60?'good':'try-again');
   banner.innerHTML=pct>=90?'🎉 Excellent! '+c+'/'+t+' — you are a true chameleon master!'
-    :pct>=60?'👍 Good job! '+c+'/'+t+' — wrong answers show the correct word in green.'
-    :'💪 Keep going! '+c+'/'+t+' — wrong answers show the correct word in green.';
+    :pct>=60?'👍 Good job! '+c+'/'+t+' — use "Show answers" to see the correct ones.'
+    :'💪 Keep going! '+c+'/'+t+' — use "Show answers" to check the correct ones.';
   banner.scrollIntoView({behavior:'smooth',block:'center'});
 });
+
+const showAllBtn=document.getElementById('showAllBtn');
+showAllBtn.addEventListener('click',()=>{
+  const anyShown=[...document.querySelectorAll('.card.show-answers')].length>0;
+  document.querySelectorAll('.card[data-task]').forEach(card=>{
+    const btn=card.querySelector('.btn-showanswers');
+    if(anyShown){
+      hideAnswers(card);
+      if(btn){btn.classList.remove('active');btn.textContent='👁 Show answers';}
+    }else{
+      showAnswers(card);
+      if(btn){btn.classList.add('active');btn.textContent='👁 Hide answers';}
+    }
+  });
+  if(anyShown){
+    showAllBtn.classList.remove('active');
+    showAllBtn.textContent='👁 Show all answers';
+  }else{
+    showAllBtn.classList.add('active');
+    showAllBtn.textContent='👁 Hide all answers';
+  }
+});
+
 document.getElementById('resetBtn').addEventListener('click',()=>{
   if(!confirm('Reset all answers?'))return;
   document.querySelectorAll('.card[data-task]').forEach(resetCard);
   banner.className='result-banner';
+  showAllBtn.classList.remove('active');
+  showAllBtn.textContent='👁 Show all answers';
 });
 
 document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{
