@@ -45,8 +45,6 @@
 
   .container { max-width:900px; margin:0 auto; padding:22px 20px; }
   .section { margin-bottom:44px; scroll-margin-top:100px; position:relative; }
-  .section::after { content:'© Daria Talanova'; display:block; text-align:center; margin-top:10px;
-    font-size:11px; letter-spacing:.4px; color:rgba(124,107,184,.55); }
   .section-title { font-size:22px; color:var(--purple); margin-bottom:6px; display:flex; align-items:center; gap:12px;
     padding-bottom:10px; border-bottom:2px solid var(--purple-light); }
   .section-title .num { background:var(--purple); color:#fff; width:36px; height:36px; border-radius:50%;
@@ -84,6 +82,10 @@
   .links a.alt { background:var(--coral); }
   .links a.pur { background:var(--purple); }
 
+  .idea-box { width:100%; min-height:100px; border:2px solid var(--purple-light); border-radius:10px; padding:10px 12px;
+    font:inherit; font-size:14px; outline:none; resize:vertical; background:#fff; color:var(--ink); }
+  .idea-box:focus { border-color:var(--purple); }
+
   .bank { border:2px dashed var(--teal); background:var(--teal-light); border-radius:14px; padding:12px; margin-bottom:16px;
     min-height:60px; display:flex; flex-wrap:wrap; gap:8px; transition:background .2s; }
   .bank.drag-over { background:#b8e0df; border-style:solid; }
@@ -105,7 +107,15 @@
   .dz.correct { background:#e8f5e8; border-color:var(--success); border-style:solid; }
   .dz.incorrect { background:#fbe9e7; border-color:var(--error); border-style:solid; }
 
-  /* ===== ANSWER KEY (shown on demand) ===== */
+  .wordorder { margin-bottom:16px; }
+  .wo-num { font-weight:800; color:var(--purple); font-size:14px; display:block; margin-bottom:6px; }
+  .wordorder .bank { margin-bottom:8px; }
+  .wo-target { min-height:48px; border:2px dashed var(--purple); border-radius:12px; background:#fff; padding:8px;
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center; transition:all .2s; }
+  .wo-target.drag-over { background:var(--purple-light); border-style:solid; }
+  .wordorder.correct .wo-target { border-color:var(--success); background:#e8f5e8; }
+  .wordorder.incorrect .wo-target { border-color:var(--error); background:#fbe9e7; }
+
   .answer-key {
     display:inline-block; margin-left:6px;
     background:var(--success); color:#fff;
@@ -115,17 +125,10 @@
     box-shadow:0 2px 6px rgba(92,184,92,.35);
     animation: popIn .25s ease;
   }
-  @keyframes popIn {
-    from { opacity:0; transform:scale(.8); }
-    to { opacity:1; transform:scale(1); }
-  }
+  @keyframes popIn { from { opacity:0; transform:scale(.8); } to { opacity:1; transform:scale(1); } }
   .match-target .answer-key { margin-left:auto; font-size:10.5px; padding:2px 7px; }
-  .option.answer-revealed {
-    border:2px solid var(--success);
-    background:#e8f5e8;
-    color:var(--teal-dark);
-    font-weight:800;
-  }
+  .wordorder .answer-key { display:block; margin:8px 0 0; white-space:normal; font-size:12px; }
+  .option.answer-revealed { border:2px solid var(--success); background:#e8f5e8; color:var(--teal-dark); font-weight:800; }
 
   .blank { width:120px; border:none; border-bottom:2px solid var(--teal); background:transparent;
     font:inherit; font-size:13.5px; font-weight:700; color:var(--ink); outline:none; text-align:center;
@@ -163,7 +166,7 @@
   .hint-input { display:inline-flex; align-items:center; margin:0 3px; vertical-align:middle; }
   .hint-input .first-letter { background:var(--purple); color:#fff; font-weight:800; padding:4px 8px; border-radius:6px 0 0 6px; font-size:14px; }
   .hint-input input { border:2px solid var(--purple-light); border-left:none; border-radius:0 6px 6px 0; padding:4px 8px;
-    font-size:14px; font-family:inherit; font-weight:600; min-width:110px; outline:none; transition:border-color .2s; }
+    font-size:14px; font-family:inherit; font-weight:600; min-width:130px; outline:none; transition:border-color .2s; }
   .hint-input input:focus { border-color:var(--purple); }
   .hint-input.correct input { border-color:var(--success); background:#e8f5e8; }
   .hint-input.incorrect input { border-color:var(--error); background:#fbe9e7; }
@@ -319,9 +322,12 @@
     </div>
   </section>
 
+  <!-- ================= 1 · TEXT ================= -->
   <section class="section" id="text">
     <div class="section-title"><span class="num">1</span> Text</div>
+
     <div class="card">
+      <h3>1.1 Read the text and answer the question: <i>What is the chameleon effect? Why do people mimic each other?</i></h3>
       <details class="text-details">
         <summary>📖 Read the text — The Chameleon Effect (click to expand)</summary>
         <div class="sub">Why do we mimic each other?</div>
@@ -336,12 +342,20 @@
         <div class="sub">Chameleons at work</div>
         <p>When working in a job, most people mimic the behaviour of people in the workplace in some way, whether consciously or not. This is because, in general, many people like to keep their work and social life relatively separate. For others, there is a certain persona that they believe they need to achieve to progress in their profession. One study, carried out by psychologists at the University of Cambridge, found that most people felt they had to <b class="v">suppress</b> some aspect of their personality at work to appear professional. Of those who did this, introverted people found it easier than extraverted people. The study concluded that extraverts felt more stressed and exhausted by fitting in to the tone of their jobs. Psychologists think this may be because there are more opportunities for introverts to <b class="v">return to their true selves</b> at work, as opposed to extraverts. Employees can spend time working alone in most jobs, which doesn't benefit the extraverted chameleon so much.</p>
       </details>
-      <div class="card-actions" style="border-top:none;margin-top:12px;padding-top:0">
-        <div class="links"><a href="https://drive.google.com/file/d/17A0jyWfYf3Z211rjdE4bpm-4jXiYgYAz/preview" target="_blank">📰 The original article</a></div>
-      </div>
+    </div>
+
+    <div class="card">
+      <h3>1.2 The original article is here</h3>
+      <div class="links"><a href="https://drive.google.com/file/d/17A0jyWfYf3Z211rjdE4bpm-4jXiYgYAz/preview" target="_blank">Follow the link</a></div>
+    </div>
+
+    <div class="card">
+      <h3>1.3 Write down your ideas about the text <i>(Optional)</i></h3>
+      <textarea class="idea-box" placeholder="Type your ideas here..."></textarea>
     </div>
   </section>
 
+  <!-- ================= 2 · VOCABULARY ================= -->
   <section class="section" id="vocabulary">
     <div class="section-title"><span class="num">2</span> Vocabulary</div>
     <div class="section-banner">
@@ -382,8 +396,15 @@
       </svg>
     </div>
 
-    <div class="card" data-task="dragfill" data-id="v3-1">
-      <h3>3.1 Fill in the gaps — drag the words</h3>
+    <div class="card">
+      <h3>2.1 Study the expressions (link to PDF file)</h3>
+      <div class="links"><a href="https://drive.google.com/file/d/19fq8yn1d5ei3ovX30kBMN5QWEzBYrkSq/view" target="_blank">Follow the link</a></div>
+      <h3 style="margin-top:14px">2.2 Quizlet</h3>
+      <div class="links"><a class="alt" href="https://quizlet.com/ru/1141145887/the-chameleon-effect-flash-cards/?i=zxpms&amp;x=1jqt" target="_blank">Follow the link</a></div>
+    </div>
+
+    <div class="card" data-task="dragfill" data-id="v2-3">
+      <h3>2.3 Fill in the gaps — drag the words</h3>
       <div class="instruction">💡 Drag each word from the bank into the correct gap. Click × on a chip to return it.</div>
       <div class="bank">
         <div class="chip" data-word="well-received">well-received</div>
@@ -408,15 +429,15 @@
       <div class="sentence">9. Starting therapy made him <span class="dz" data-answer="feel vulnerable"></span>, but it was the first step toward major growth.</div>
       <div class="sentence">10. To broaden your perspective, you need to be <span class="dz" data-answer="exposed"></span> to ideas that challenge your own.</div>
       <div class="card-actions">
-        <button class="btn btn-check btn-small" data-card="v3-1">✓ Check</button>
-        <button class="btn btn-showanswers btn-small" data-card="v3-1">👁 Show answers</button>
-        <button class="btn btn-resetcard btn-small" data-card="v3-1">↻ Reset</button>
-        <span class="card-score" data-score="v3-1"></span>
+        <button class="btn btn-check btn-small" data-card="v2-3">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="v2-3">👁 Show answers</button>
+        <button class="btn btn-resetcard btn-small" data-card="v2-3">↻ Reset</button>
+        <span class="card-score" data-score="v2-3"></span>
       </div>
     </div>
 
-    <div class="card" data-task="match" data-id="v4-1">
-      <h3>4.1 Match the parts of collocations</h3>
+    <div class="card" data-task="match" data-id="v2-4">
+      <h3>2.4 Match the parts of collocations</h3>
       <div class="instruction">💡 Drag each ending to the matching word. Click the coral label to unmatch.</div>
       <div class="match-grid">
         <div class="match-col">
@@ -441,15 +462,15 @@
         </div>
       </div>
       <div class="card-actions">
-        <button class="btn btn-check btn-small" data-card="v4-1">✓ Check</button>
-        <button class="btn btn-showanswers btn-small" data-card="v4-1">👁 Show answers</button>
-        <button class="btn btn-resetcard btn-small" data-card="v4-1">↻ Reset</button>
-        <span class="card-score" data-score="v4-1"></span>
+        <button class="btn btn-check btn-small" data-card="v2-4">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="v2-4">👁 Show answers</button>
+        <button class="btn btn-resetcard btn-small" data-card="v2-4">↻ Reset</button>
+        <span class="card-score" data-score="v2-4"></span>
       </div>
     </div>
 
-    <div class="card" data-task="radio" data-id="v5-1">
-      <h3>5.1 Choose the correct preposition</h3>
+    <div class="card" data-task="radio" data-id="v2-5">
+      <h3>2.5 Choose the correct preposition</h3>
       <div class="sentence">1. In the interview, he tried to come across <span class="dz dz-radio" data-answer="as"></span> confident and capable.
         <div class="options"><div class="option" data-value="as">as</div><div class="option" data-value="of">of</div><div class="option" data-value="with">with</div></div></div>
       <div class="sentence">2. The chameleon's skin blends <span class="dz dz-radio" data-answer="into"></span> its surroundings perfectly.
@@ -463,18 +484,62 @@
       <div class="sentence">6. She was worried about fitting <span class="dz dz-radio" data-answer="in"></span> at her new school.
         <div class="options"><div class="option" data-value="in">in</div><div class="option" data-value="at">at</div><div class="option" data-value="off">off</div></div></div>
       <div class="card-actions">
-        <button class="btn btn-check btn-small" data-card="v5-1">✓ Check</button>
-        <button class="btn btn-showanswers btn-small" data-card="v5-1">👁 Show answers</button>
-        <button class="btn btn-resetcard btn-small" data-card="v5-1">↻ Reset</button>
-        <span class="card-score" data-score="v5-1"></span>
+        <button class="btn btn-check btn-small" data-card="v2-5">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="v2-5">👁 Show answers</button>
+        <button class="btn btn-resetcard btn-small" data-card="v2-5">↻ Reset</button>
+        <span class="card-score" data-score="v2-5"></span>
+      </div>
+    </div>
+
+    <div class="card" data-task="dragfill" data-id="v2-6">
+      <h3>2.6 Fill in the gaps — drag the phrases</h3>
+      <div class="instruction">💡 Drag each phrase from the bank into the correct gap. Click × on a chip to return it.</div>
+      <div class="bank">
+        <div class="chip" data-word="be heightened">be heightened</div>
+        <div class="chip" data-word="go unnoticed">go unnoticed</div>
+        <div class="chip" data-word="blend into">blend into</div>
+        <div class="chip" data-word="return to their true selves">return to their true selves</div>
+        <div class="chip" data-word="quirk">quirk</div>
+        <div class="chip" data-word="go undetected">go undetected</div>
+        <div class="chip" data-word="incorporate">incorporate</div>
+        <div class="chip" data-word="occur">occur</div>
+        <div class="chip" data-word="pinpoint">pinpoint</div>
+        <div class="chip" data-word="swapped for">swapped for</div>
+        <div class="chip" data-word="comes across">comes across</div>
+        <div class="chip" data-word="suppress">suppress</div>
+        <div class="chip" data-word="at play">at play</div>
+        <div class="chip" data-word="to the extreme">to the extreme</div>
+      </div>
+      <ul style="list-style:disc; margin-left:20px;">
+        <li class="sentence">When you procrastinate on an important goal, there are often deeper fears of failure <span class="dz" data-answer="at play"></span>.</li>
+        <li class="sentence">I try to <span class="dz" data-answer="incorporate"></span> a short meditation session <b>into</b> my morning ritual for clarity.</li>
+        <li class="sentence">In interviews, passion <span class="dz" data-answer="comes across"></span> <b>as</b> more genuine than perfectly rehearsed answers.</li>
+        <li class="sentence">A subtle lack of fulfillment can <span class="dz" data-answer="go undetected"></span> for years if you don't pause to self-reflect.</li>
+        <li class="sentence">She learned to embrace her <span class="dz" data-answer="quirk"></span> of needing solitude to recharge, seeing it as a strength.</li>
+        <li class="sentence">Your small, consistent efforts towards a goal will not <span class="dz" data-answer="go unnoticed"></span> by your future self.</li>
+        <li class="sentence">Her people-pleasing was <span class="dz" data-answer="swapped for"></span> healthy boundary-setting after some self-reflection.</li>
+        <li class="sentence">It's common for a crisis of confidence to <span class="dz" data-answer="occur"></span> just before a major personal breakthrough.</li>
+        <li class="sentence">During times of change, our senses can <span class="dz" data-answer="be heightened"></span>, making us more aware of both opportunities and fears.</li>
+        <li class="sentence">Don't <b>take</b> self-discipline <span class="dz" data-answer="to the extreme"></span>; allow yourself grace to avoid burnout.</li>
+        <li class="sentence">Many people, after years of wearing a social mask, feel immense relief when they <span class="dz" data-answer="return to their true selves"></span>.</li>
+        <li class="sentence">Through journaling, she could <span class="dz" data-answer="pinpoint"></span> the exact moments her anxiety was triggered.</li>
+        <li class="sentence">He worked to <span class="dz" data-answer="suppress"></span> his defensive reactions in order to listen and learn from criticism.</li>
+        <li class="sentence">Early in her career, she tried to <span class="dz" data-answer="blend into"></span> the corporate culture, but later realized she needed to <b>blend</b> her personal values <b>into</b> her professional life.</li>
+      </ul>
+      <div class="card-actions">
+        <button class="btn btn-check btn-small" data-card="v2-6">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="v2-6">👁 Show answers</button>
+        <button class="btn btn-resetcard btn-small" data-card="v2-6">↻ Reset</button>
+        <span class="card-score" data-score="v2-6"></span>
       </div>
     </div>
   </section>
 
+  <!-- ================= 3 · AUDIO ================= -->
   <section class="section" id="audio">
     <div class="section-title"><span class="num">3</span> Audio</div>
-    <div class="card" data-task="typeblank" data-id="a1-1">
-      <h3>1.1 Watch the videos and fill in the gaps — type the missing words</h3>
+    <div class="card" data-task="typeblank" data-id="a3-1">
+      <h3>3.1 Watch the videos and fill in the gaps — type the missing words</h3>
       <div class="instruction">💡 Open each clip, listen, and type the missing word(s) into the blanks. No word bank — rely on your ear!</div>
 
       <div class="links" style="margin:0 0 8px"><a href="https://drive.google.com/file/d/15iGAtw2DsPSLx9g5uPJcoNynHHAS0nTO/preview" target="_blank">▶ Part 1</a></div>
@@ -493,43 +558,155 @@
       <div class="sentence">- So what were they doing that we're not?<br>- We took this tech from Straal's lab on the Glenn. It was an augmentation to their navigation system. I've <input class="blank" data-answer="incorporated"> it <input class="blank" data-answer="into"> our drive unit, but it won't load completely. To function optimally, it would appear to require some kind of supercomputer.<br>- You must have missed that on the Glenn.</div>
 
       <div class="card-actions">
-        <button class="btn btn-check btn-small" data-card="a1-1">✓ Check</button>
-        <button class="btn btn-showanswers btn-small" data-card="a1-1">👁 Show answers</button>
-        <button class="btn btn-resetcard btn-small" data-card="a1-1">↻ Reset</button>
-        <span class="card-score" data-score="a1-1"></span>
+        <button class="btn btn-check btn-small" data-card="a3-1">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="a3-1">👁 Show answers</button>
+        <button class="btn btn-resetcard btn-small" data-card="a3-1">↻ Reset</button>
+        <span class="card-score" data-score="a3-1"></span>
       </div>
     </div>
   </section>
 
+  <!-- ================= 4 · REVISION ================= -->
   <section class="section" id="revision">
     <div class="section-title"><span class="num">4</span> Revision</div>
 
-    <div class="card" data-task="typehint" data-id="r1-1">
-      <h3>1.1 Complete the gaps — type the word (first letter given)</h3>
-      <div class="sentence">1. There are many complex factors at <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="play"></span> in the economy's downturn.</div>
-      <div class="sentence">2. The chameleon can <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="blend"></span> into its surroundings to hide from predators.</div>
-      <div class="sentence">3. The <span class="hint-input"><span class="first-letter">l</span><input type="text" data-answer="likeability"></span> of the main character made the movie a joy to watch.</div>
-      <div class="sentence">4. Her wisdom helped her <span class="hint-input"><span class="first-letter">n</span><input type="text" data-answer="navigate"></span> through life's many challenges.</div>
-      <div class="sentence">5. He changed his style of dress just to <span class="hint-input"><span class="first-letter">f</span><input type="text" data-answer="fit"></span> in with the new crowd.</div>
-      <div class="sentence">6. Don't worry about the presentation; I have your <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="back"></span> if you forget any data.</div>
-      <div class="sentence">7. The coastal village is under <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="threat"></span> of flooding from the rising seas.</div>
-      <div class="sentence">8. After sharing her personal story, she began to feel <span class="hint-input"><span class="first-letter">v</span><input type="text" data-answer="vulnerable"></span>.</div>
-      <div class="sentence">9. Children should be <span class="hint-input"><span class="first-letter">e</span><input type="text" data-answer="exposed"></span> to different cultures and ideas.</div>
-      <div class="sentence">10. Despite his shyness, he comes <span class="hint-input"><span class="first-letter">a</span><input type="text" data-answer="across"></span> as very confident in interviews.</div>
-      <div class="sentence">11. Her hard work often goes <span class="hint-input"><span class="first-letter">u</span><input type="text" data-answer="unnoticed"></span> by her supervisors.</div>
+    <div class="card" data-task="typehint" data-id="r4-1">
+      <h3>4.1 Complete the gaps — write the FULL word (the first letter is only a hint)</h3>
+      <div class="instruction">💡 Type the complete word into each gap. The purple letter before the gap is just a hint — it is NOT part of your answer.</div>
+      <div class="sentence">1. There are many complex factors <b>at</b> <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="play"></span> in the economy's downturn.</div>
+      <div class="sentence">2. The chameleon can <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="blend"></span> <b>into</b> its surroundings to hide from predators.</div>
+      <div class="sentence">3. <b>The</b> <span class="hint-input"><span class="first-letter">l</span><input type="text" data-answer="likeability"></span> <b>of</b> the main character made the movie a joy to watch.</div>
+      <div class="sentence">4. Her wisdom helped her <span class="hint-input"><span class="first-letter">n</span><input type="text" data-answer="navigate"></span> <b>through life's</b> many challenges.</div>
+      <div class="sentence">5. He changed his style of dress just to <span class="hint-input"><span class="first-letter">f</span><input type="text" data-answer="fit"></span> <b>in</b> with the new crowd.</div>
+      <div class="sentence">6. Don't worry about the presentation; I <b>have your</b> <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="back"></span> if you forget any data.</div>
+      <div class="sentence">7. The coastal village is <b>under</b> <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="threat"></span> of flooding from the rising seas.</div>
+      <div class="sentence">8. After sharing her personal story, she began to <b>feel</b> <span class="hint-input"><span class="first-letter">v</span><input type="text" data-answer="vulnerable"></span>.</div>
+      <div class="sentence">9. Children should <b>be</b> <span class="hint-input"><span class="first-letter">e</span><input type="text" data-answer="exposed"></span> <b>to</b> different cultures and ideas.</div>
+      <div class="sentence">10. Despite his shyness, he <b>comes</b> <span class="hint-input"><span class="first-letter">a</span><input type="text" data-answer="across"></span> <b>as</b> very confident in interviews.</div>
+      <div class="sentence">11. Her hard work often <b>goes</b> <span class="hint-input"><span class="first-letter">u</span><input type="text" data-answer="unnoticed"></span> by her supervisors.</div>
       <div class="sentence">12. It's hard to <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="pinpoint"></span> the exact moment when their relationship changed.</div>
       <div class="sentence">13. He tried to <span class="hint-input"><span class="first-letter">s</span><input type="text" data-answer="suppress"></span> a laugh during the serious meeting.</div>
-      <div class="sentence">14. After the stressful project ended, the team could finally return to their <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="true"></span> selves.</div>
+      <div class="sentence">14. After the stressful project ended, the team could finally relax and <b>return to their</b> <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="true"></span> <b>selves</b>.</div>
       <div class="card-actions">
-        <button class="btn btn-check btn-small" data-card="r1-1">✓ Check</button>
-        <button class="btn btn-showanswers btn-small" data-card="r1-1">👁 Show answers</button>
-        <button class="btn btn-resetcard btn-small" data-card="r1-1">↻ Reset</button>
-        <span class="card-score" data-score="r1-1"></span>
+        <button class="btn btn-check btn-small" data-card="r4-1">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="r4-1">👁 Show answers</button>
+        <button class="btn btn-resetcard btn-small" data-card="r4-1">↻ Reset</button>
+        <span class="card-score" data-score="r4-1"></span>
       </div>
     </div>
 
-    <div class="card" data-task="match" data-id="r3-1">
-      <h3>3.1 Match the vocabulary to its definition</h3>
+    <div class="card" data-task="wordorder" data-id="r4-2">
+      <h3>4.2 Put the words into correct order — build each sentence</h3>
+      <div class="instruction">💡 Drag the words from the bank into the empty area in the correct order to build the sentence. Click a word in the answer area to send it back.</div>
+
+      <div class="wordorder" data-answer="Moving|to|a different|country|drastically|changed|her outlook|on|life.">
+        <span class="wo-num">1.</span>
+        <div class="bank wo-bank">
+          <div class="chip" data-word="drastically">drastically</div>
+          <div class="chip" data-word="changed">changed</div>
+          <div class="chip" data-word="life.">life.</div>
+          <div class="chip" data-word="a different">a different</div>
+          <div class="chip" data-word="on">on</div>
+          <div class="chip" data-word="country">country</div>
+          <div class="chip" data-word="her outlook">her outlook</div>
+          <div class="chip" data-word="to">to</div>
+          <div class="chip" data-word="Moving">Moving</div>
+        </div>
+        <div class="wo-target"></div>
+      </div>
+
+      <div class="wordorder" data-answer="To|avoid|burnout,|she|tries|to keep|her|work|and|social life|relatively|separate.">
+        <span class="wo-num">2.</span>
+        <div class="bank wo-bank">
+          <div class="chip" data-word="social life">social life</div>
+          <div class="chip" data-word="relatively">relatively</div>
+          <div class="chip" data-word="and">and</div>
+          <div class="chip" data-word="tries">tries</div>
+          <div class="chip" data-word="burnout,">burnout,</div>
+          <div class="chip" data-word="to keep">to keep</div>
+          <div class="chip" data-word="separate.">separate.</div>
+          <div class="chip" data-word="her">her</div>
+          <div class="chip" data-word="work">work</div>
+          <div class="chip" data-word="avoid">avoid</div>
+          <div class="chip" data-word="To">To</div>
+          <div class="chip" data-word="she">she</div>
+        </div>
+        <div class="wo-target"></div>
+      </div>
+
+      <div class="wordorder" data-answer="He|took|his minimalist|lifestyle|to|the extreme|by owning|only|fifty items.">
+        <span class="wo-num">3.</span>
+        <div class="bank wo-bank">
+          <div class="chip" data-word="fifty items.">fifty items.</div>
+          <div class="chip" data-word="He">He</div>
+          <div class="chip" data-word="his minimalist">his minimalist</div>
+          <div class="chip" data-word="to">to</div>
+          <div class="chip" data-word="only">only</div>
+          <div class="chip" data-word="the extreme">the extreme</div>
+          <div class="chip" data-word="took">took</div>
+          <div class="chip" data-word="by owning">by owning</div>
+          <div class="chip" data-word="lifestyle">lifestyle</div>
+        </div>
+        <div class="wo-target"></div>
+      </div>
+
+      <div class="wordorder" data-answer="He|tried|to suppress|his laughter|during|the serious|meeting.">
+        <span class="wo-num">4.</span>
+        <div class="bank wo-bank">
+          <div class="chip" data-word="to suppress">to suppress</div>
+          <div class="chip" data-word="He">He</div>
+          <div class="chip" data-word="tried">tried</div>
+          <div class="chip" data-word="during">during</div>
+          <div class="chip" data-word="the serious">the serious</div>
+          <div class="chip" data-word="his laughter">his laughter</div>
+          <div class="chip" data-word="meeting.">meeting.</div>
+        </div>
+        <div class="wo-target"></div>
+      </div>
+
+      <div class="wordorder" data-answer="After|the|loss,|she|felt|emotionally|raw|and|vulnerable.">
+        <span class="wo-num">5.</span>
+        <div class="bank wo-bank">
+          <div class="chip" data-word="emotionally">emotionally</div>
+          <div class="chip" data-word="and">and</div>
+          <div class="chip" data-word="loss,">loss,</div>
+          <div class="chip" data-word="raw">raw</div>
+          <div class="chip" data-word="she">she</div>
+          <div class="chip" data-word="the">the</div>
+          <div class="chip" data-word="felt">felt</div>
+          <div class="chip" data-word="vulnerable.">vulnerable.</div>
+          <div class="chip" data-word="After">After</div>
+        </div>
+        <div class="wo-target"></div>
+      </div>
+
+      <div class="wordorder" data-answer="He|relied|on|his faith|to navigate|through|that|dark|period of|unemployment.">
+        <span class="wo-num">6.</span>
+        <div class="bank wo-bank">
+          <div class="chip" data-word="period of">period of</div>
+          <div class="chip" data-word="dark">dark</div>
+          <div class="chip" data-word="He">He</div>
+          <div class="chip" data-word="through">through</div>
+          <div class="chip" data-word="on">on</div>
+          <div class="chip" data-word="to navigate">to navigate</div>
+          <div class="chip" data-word="that">that</div>
+          <div class="chip" data-word="relied">relied</div>
+          <div class="chip" data-word="unemployment.">unemployment.</div>
+          <div class="chip" data-word="his faith">his faith</div>
+        </div>
+        <div class="wo-target"></div>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn btn-check btn-small" data-card="r4-2">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="r4-2">👁 Show answers</button>
+        <button class="btn btn-resetcard btn-small" data-card="r4-2">↻ Reset</button>
+        <span class="card-score" data-score="r4-2"></span>
+      </div>
+    </div>
+
+    <div class="card" data-task="match" data-id="r4-3">
+      <h3>4.3 Match the vocabulary to its definition</h3>
       <div class="instruction">💡 Drag each word/phrase to the correct definition.</div>
       <div class="match-grid">
         <div class="match-col">
@@ -556,14 +733,15 @@
         </div>
       </div>
       <div class="card-actions">
-        <button class="btn btn-check btn-small" data-card="r3-1">✓ Check</button>
-        <button class="btn btn-showanswers btn-small" data-card="r3-1">👁 Show answers</button>
-        <button class="btn btn-resetcard btn-small" data-card="r3-1">↻ Reset</button>
-        <span class="card-score" data-score="r3-1"></span>
+        <button class="btn btn-check btn-small" data-card="r4-3">✓ Check</button>
+        <button class="btn btn-showanswers btn-small" data-card="r4-3">👁 Show answers</button>
+        <button class="btn btn-resetcard btn-small" data-card="r4-3">↻ Reset</button>
+        <span class="card-score" data-score="r4-3"></span>
       </div>
     </div>
   </section>
 
+  <!-- ================= 5 · SPEAKING ================= -->
   <section class="section" id="speaking">
     <div class="section-title"><span class="num">5</span> Speaking</div>
     <div class="section-banner">
@@ -603,7 +781,9 @@
         <g fill="#7c6bb8"><path d="M300 250 l6 15 15 6 -15 6 -6 15 -6 -15 -15 -6 15 -6z"/><path d="M1480 60 l5 12 12 5 -12 5 -5 12 -5 -12 -12 -5 12 -5z"/></g>
       </svg>
     </div>
+
     <div class="card">
+      <h3>5.1 Discussion questions</h3>
       <h3>Thursday</h3>
       <p class="sentence">According to the text, what is the "chameleon effect" and what are two possible reasons why humans mimic each other unconsciously?</p>
       <h3>Friday — pick one</h3>
@@ -616,9 +796,11 @@
       <p class="sentence">4. In what kind of new social situation do you most <b class="v">feel vulnerable</b>?</p>
       <p class="sentence">5. If you could <b class="v">swap one daily habit for</b> a better one, what would it be?</p>
       <p class="sentence">6. What is a personal strength of yours that often <b class="v">goes undetected</b>?</p>
-      <div class="card-actions">
-        <div class="links"><a class="pur" href="https://docs.google.com/presentation/d/1Ntcsr8KBvq2HdZS-ECFu9akLjv0shtywkRwBpz3a2og/edit?usp=sharing" target="_blank">📽 Presentation</a></div>
-      </div>
+    </div>
+
+    <div class="card">
+      <h3>5.2 Presentation</h3>
+      <div class="links"><a class="pur" href="https://docs.google.com/presentation/d/1Ntcsr8KBvq2HdZS-ECFu9akLjv0shtywkRwBpz3a2og/edit?usp=sharing" target="_blank">Follow the link</a></div>
     </div>
   </section>
 
@@ -636,6 +818,7 @@
 </div>
 
 <script>
+/* ================= DRAG & DROP ENGINE ================= */
 const state={dragging:null,ghost:null,offsetX:0,offsetY:0,currentOver:null};
 function pointerPos(e){
   if(e.touches&&e.touches[0])return{x:e.touches[0].clientX,y:e.touches[0].clientY};
@@ -666,7 +849,7 @@ function onMove(e){
   const target=document.elementFromPoint(pos.x,pos.y);
   if(state.ghost)state.ghost.style.display='';
   if(state.currentOver)state.currentOver.classList.remove('drag-over');
-  const drop=target&&target.closest?target.closest('.dz,.bank,.match-target'):null;
+  const drop=target&&target.closest?target.closest('.dz,.bank,.match-target,.wo-target'):null;
   if(drop){drop.classList.add('drag-over');state.currentOver=drop;}else state.currentOver=null;
 }
 function onEnd(e){
@@ -677,7 +860,7 @@ function onEnd(e){
   if(state.ghost){state.ghost.remove();state.ghost=null;}
   state.dragging.el.classList.remove('dragging');
   if(state.currentOver)state.currentOver.classList.remove('drag-over');
-  const drop=target&&target.closest?target.closest('.dz,.bank,.match-target'):null;
+  const drop=target&&target.closest?target.closest('.dz,.bank,.match-target,.wo-target'):null;
   const{el,type,origin}=state.dragging;
   if(type==='chip'){
     if(drop&&drop.classList.contains('dz')&&!drop.classList.contains('dz-radio')){
@@ -685,6 +868,9 @@ function onEnd(e){
       if(existing){existing.innerHTML=existing.dataset.word;origin.appendChild(existing);}
       drop.appendChild(el);
       el.innerHTML=el.dataset.word+' <span class="remove">×</span>';
+    }else if(drop&&drop.classList.contains('wo-target')){
+      drop.appendChild(el);
+      el.innerHTML=el.dataset.word;
     }else if(drop&&drop.classList.contains('bank')){
       drop.appendChild(el);el.innerHTML=el.dataset.word;
     }else{origin.appendChild(el);}
@@ -714,9 +900,13 @@ document.querySelectorAll('.match-item').forEach(el=>makeDraggable(el,'match'));
 
 document.addEventListener('click',(e)=>{
   if(e.target.classList.contains('remove')){
-    const chip=e.target.closest('.chip'),dz=chip.parentElement,card=dz.closest('.card');
+    const chip=e.target.closest('.chip'),card=chip.closest('.card');
     chip.innerHTML=chip.dataset.word;
     card.querySelector('.bank').appendChild(chip);
+  }
+  if(e.target.classList.contains('chip')&&e.target.parentElement.classList.contains('wo-target')){
+    const chip=e.target,wo=chip.closest('.wordorder');
+    wo.querySelector('.wo-bank').appendChild(chip);
   }
   if(e.target.classList.contains('matched-label')){
     const t=e.target.closest('.match-target');
@@ -739,7 +929,7 @@ const norm=s=>(s||'').trim().toLowerCase();
 const cardResults={};
 
 function clearCard(card){
-  card.querySelectorAll('.dz,.hint-input,.option,.match-target,.chip,.blank').forEach(el=>el.classList.remove('correct','incorrect','answer-revealed'));
+  card.querySelectorAll('.dz,.hint-input,.option,.match-target,.chip,.blank,.wordorder,.wo-target').forEach(el=>el.classList.remove('correct','incorrect','answer-revealed'));
   card.querySelectorAll('.answer-key').forEach(el=>el.remove());
   card.classList.remove('correct','incorrect','show-answers');
   const btn=card.querySelector('.btn-showanswers');
@@ -789,6 +979,13 @@ function evaluateCard(card){
       if(norm(inp.value)===norm(inp.dataset.answer)){inp.classList.add('correct');correct++;}
       else inp.classList.add('incorrect');
     });
+  }else if(task==='wordorder'){
+    card.querySelectorAll('.wordorder').forEach(wo=>{
+      total++;
+      const seq=[...wo.querySelectorAll('.wo-target .chip')].map(c=>c.dataset.word).join('|');
+      if(seq===wo.dataset.answer){wo.classList.add('correct');correct++;}
+      else wo.classList.add('incorrect');
+    });
   }
   cardResults[card.dataset.id]={correct,total};
   card.classList.add(correct===total?'correct':'incorrect');
@@ -831,6 +1028,13 @@ function showAnswers(card){
       exp.className='answer-key';exp.textContent='✓ '+inp.dataset.answer;
       inp.parentElement.insertBefore(exp,inp.nextSibling);
     });
+  }else if(task==='wordorder'){
+    card.querySelectorAll('.wordorder').forEach(wo=>{
+      const exp=document.createElement('span');
+      exp.className='answer-key';
+      exp.textContent='✓ '+wo.dataset.answer.replace(/\|/g,' ');
+      wo.appendChild(exp);
+    });
   }
   card.classList.add('show-answers');
 }
@@ -843,6 +1047,7 @@ function hideAnswers(card){
 function resetCard(card){
   clearCard(card);
   card.querySelectorAll('.dz .chip').forEach(chip=>{chip.innerHTML=chip.dataset.word;card.querySelector('.bank').appendChild(chip);});
+  card.querySelectorAll('.wo-target .chip').forEach(chip=>{chip.closest('.wordorder').querySelector('.wo-bank').appendChild(chip);});
   card.querySelectorAll('.dz-radio').forEach(dz=>{delete dz.dataset.selected;});
   card.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
   card.querySelectorAll('.match-target').forEach(mt=>{
@@ -913,13 +1118,8 @@ showAllBtn.addEventListener('click',()=>{
       if(btn){btn.classList.add('active');btn.textContent='👁 Hide answers';}
     }
   });
-  if(anyShown){
-    showAllBtn.classList.remove('active');
-    showAllBtn.textContent='👁 Show all answers';
-  }else{
-    showAllBtn.classList.add('active');
-    showAllBtn.textContent='👁 Hide all answers';
-  }
+  if(anyShown){showAllBtn.classList.remove('active');showAllBtn.textContent='👁 Show all answers';}
+  else{showAllBtn.classList.add('active');showAllBtn.textContent='👁 Hide all answers';}
 });
 
 document.getElementById('resetBtn').addEventListener('click',()=>{
