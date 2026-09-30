@@ -98,6 +98,10 @@
   .chip.incorrect { background:var(--error); color:#fff; border-color:var(--error); }
   .chip .remove { margin-left:6px; cursor:pointer; opacity:.65; font-weight:900; }
   .chip .remove:hover { opacity:1; }
+  .chip.selected, .match-item.selected {
+    outline:3px solid var(--coral); outline-offset:2px;
+    transform:scale(1.05); box-shadow:0 4px 12px rgba(232,112,95,.4);
+  }
 
   .sentence { padding:10px 14px; margin-bottom:10px; background:var(--soft); border-radius:10px; font-size:14.5px; line-height:2.1; }
   .dz { display:inline-block; min-width:100px; min-height:28px; background:rgba(255,255,255,.9); border:2px dashed var(--purple);
@@ -199,6 +203,24 @@
   .footer { text-align:center; padding:10px 20px 30px; }
   .footer .foot-emblem { height:170px; width:auto; margin:0 auto 6px; display:block; }
   .footer .copy { font-size:12px; color:#9a93b5; }
+
+  /* ===== MOBILE: tap-to-place ===== */
+  @media (pointer:coarse){
+    .chip { padding:10px 16px; font-size:14px; }
+    .match-item { padding:12px 14px; font-size:14px; }
+    .match-target { min-height:52px; }
+    .dz { min-width:110px; min-height:36px; }
+    .option { padding:9px 18px; font-size:14px; }
+    .blank { width:110px; font-size:15px; }
+    .hint-input input { min-width:120px; font-size:15px; }
+    .btn { padding:12px 22px; font-size:14px; }
+    .btn-small { padding:9px 16px; font-size:13px; }
+    .wo-target { min-height:56px; }
+    .nav a { font-size:13px; padding:6px 14px; }
+    .section-title { font-size:20px; }
+    .card h3 { font-size:15px; }
+    .sentence { font-size:14px; line-height:2.2; }
+  }
 </style>
 </head>
 <body>
@@ -405,7 +427,7 @@
 
     <div class="card" data-task="dragfill" data-id="v2-3">
       <h3>2.3 Fill in the gaps — drag the words</h3>
-      <div class="instruction">💡 Drag each word from the bank into the correct gap. Click × on a chip to return it.</div>
+      <div class="instruction">💡 Drag each word from the bank into the correct gap (or tap the word, then tap the gap). Click × on a chip to return it.</div>
       <div class="bank">
         <div class="chip" data-word="well-received">well-received</div>
         <div class="chip" data-word="likeability">likeability</div>
@@ -438,7 +460,7 @@
 
     <div class="card" data-task="match" data-id="v2-4">
       <h3>2.4 Match the parts of collocations</h3>
-      <div class="instruction">💡 Drag each ending to the matching word. Click the coral label to unmatch.</div>
+      <div class="instruction">💡 Drag each ending to the matching word (or tap the word, then tap the definition). Click the coral label to unmatch.</div>
       <div class="match-grid">
         <div class="match-col">
           <h4>Word</h4>
@@ -493,7 +515,7 @@
 
     <div class="card" data-task="dragfill" data-id="v2-6">
       <h3>2.6 Fill in the gaps — drag the phrases</h3>
-      <div class="instruction">💡 Drag each phrase from the bank into the correct gap. Click × on a chip to return it.</div>
+      <div class="instruction">💡 Drag each phrase from the bank into the correct gap (or tap the phrase, then tap the gap). Click × on a chip to return it.</div>
       <div class="bank">
         <div class="chip" data-word="be heightened">be heightened</div>
         <div class="chip" data-word="go unnoticed">go unnoticed</div>
@@ -573,9 +595,9 @@
     <div class="card" data-task="typehint" data-id="r4-1">
       <h3>4.1 Complete the gaps — write the FULL word (the first letter is only a hint)</h3>
       <div class="instruction">💡 Type the complete word into each gap. The purple letter before the gap is just a hint — it is NOT part of your answer.</div>
-      <div class="sentence">1. There are many complex factors <b>at</b> <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="play"></span> in the economy's downturn.</div>
+      <div class="sentence">1. There are many complex factors at <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="play"></span> in the economy's downturn.</div>
       <div class="sentence">2. The chameleon can <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="blend"></span> <b>into</b> its surroundings to hide from predators.</div>
-      <div class="sentence">3. <b>The</b> <span class="hint-input"><span class="first-letter">l</span><input type="text" data-answer="likeability"></span> <b>of</b> the main character made the movie a joy to watch.</div>
+      <div class="sentence">3. <b>The</b> <span class="hint-input"><span class="first-letter">l</span><input type="text" data-answer="likeability"></span> of the main character made the movie a joy to watch.</div>
       <div class="sentence">4. Her wisdom helped her <span class="hint-input"><span class="first-letter">n</span><input type="text" data-answer="navigate"></span> <b>through life's</b> many challenges.</div>
       <div class="sentence">5. He changed his style of dress just to <span class="hint-input"><span class="first-letter">f</span><input type="text" data-answer="fit"></span> <b>in</b> with the new crowd.</div>
       <div class="sentence">6. Don't worry about the presentation; I <b>have your</b> <span class="hint-input"><span class="first-letter">b</span><input type="text" data-answer="back"></span> if you forget any data.</div>
@@ -586,7 +608,7 @@
       <div class="sentence">11. Her hard work often <b>goes</b> <span class="hint-input"><span class="first-letter">u</span><input type="text" data-answer="unnoticed"></span> by her supervisors.</div>
       <div class="sentence">12. It's hard to <span class="hint-input"><span class="first-letter">p</span><input type="text" data-answer="pinpoint"></span> the exact moment when their relationship changed.</div>
       <div class="sentence">13. He tried to <span class="hint-input"><span class="first-letter">s</span><input type="text" data-answer="suppress"></span> a laugh during the serious meeting.</div>
-      <div class="sentence">14. After the stressful project ended, the team could finally relax and <b>return to their</b> <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="true"></span> <b>selves</b>.</div>
+      <div class="sentence">14. After the stressful project ended, the team could finally relax and <b>return to their</b> <span class="hint-input"><span class="first-letter">t</span><input type="text" data-answer="true"></span> selves.</div>
       <div class="card-actions">
         <button class="btn btn-check btn-small" data-card="r4-1">✓ Check</button>
         <button class="btn btn-showanswers btn-small" data-card="r4-1">👁 Show answers</button>
@@ -597,7 +619,7 @@
 
     <div class="card" data-task="wordorder" data-id="r4-2">
       <h3>4.2 Put the words into correct order — build each sentence</h3>
-      <div class="instruction">💡 Drag the words from the bank into the empty area in the correct order to build the sentence. Click a word in the answer area to send it back.</div>
+      <div class="instruction">💡 Drag the words from the bank into the empty area in the correct order (or tap a word, then tap the target area). Click a word in the answer area to send it back.</div>
 
       <div class="wordorder" data-answer="Moving|to|a different|country|drastically|changed|her outlook|on|life.">
         <span class="wo-num">1.</span>
@@ -707,7 +729,7 @@
 
     <div class="card" data-task="match" data-id="r4-3">
       <h3>4.3 Match the vocabulary to its definition</h3>
-      <div class="instruction">💡 Drag each word/phrase to the correct definition.</div>
+      <div class="instruction">💡 Drag each word/phrase to the correct definition (or tap a word, then tap its definition). Click the coral label to unmatch.</div>
       <div class="match-grid">
         <div class="match-col">
           <h4>Word / phrase</h4>
@@ -818,15 +840,59 @@
 </div>
 
 <script>
-/* ================= DRAG & DROP ENGINE ================= */
-const state={dragging:null,ghost:null,offsetX:0,offsetY:0,currentOver:null};
-function pointerPos(e){
-  if(e.touches&&e.touches[0])return{x:e.touches[0].clientX,y:e.touches[0].clientY};
-  if(e.changedTouches&&e.changedTouches[0])return{x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY};
-  return{x:e.clientX,y:e.clientY};
+/* ================= HELPERS ================= */
+const norm=s=>(s||'').trim().toLowerCase();
+const isCoarse=window.matchMedia&&window.matchMedia('(pointer: coarse)').matches;
+let selected=null;
+function select(el){
+  if(selected)selected.classList.remove('selected');
+  selected=el||null;
+  if(selected)selected.classList.add('selected');
 }
+function returnChip(chip,sourceZone){
+  chip.innerHTML=chip.dataset.word;
+  chip.classList.remove('correct','incorrect','selected');
+  let bank;
+  if(sourceZone&&sourceZone.classList.contains('wo-target'))bank=sourceZone.closest('.wordorder').querySelector('.wo-bank');
+  else bank=chip.closest('.card').querySelector('.bank');
+  bank.appendChild(chip);
+  if(selected===chip)select(null);
+}
+function placeChip(dz,chip){
+  const existing=dz.querySelector('.chip');
+  if(existing&&existing!==chip)returnChip(existing,dz);
+  dz.appendChild(chip);
+  chip.innerHTML=chip.dataset.word+' <span class="remove">×</span>';
+  select(null);
+}
+function assignMatch(mt,item){
+  const label=mt.querySelector('.matched-label');
+  if(label.dataset.word){
+    const prev=document.querySelector('.match-item[data-word="'+CSS.escape(label.dataset.word)+'"]');
+    if(prev)prev.classList.remove('matched');
+  }
+  label.dataset.word=item.dataset.word;
+  label.textContent=item.dataset.word+' ×';
+  label.style.display='inline-block';
+  mt.classList.add('filled');
+  item.classList.add('matched');
+  select(null);
+}
+function unmatch(mt){
+  const label=mt.querySelector('.matched-label');
+  if(!label.dataset.word)return;
+  const item=document.querySelector('.match-item[data-word="'+CSS.escape(label.dataset.word)+'"]');
+  if(item)item.classList.remove('matched');
+  label.textContent='';label.style.display='none';delete label.dataset.word;
+  mt.classList.remove('filled');
+}
+
+/* ================= DRAG ENGINE (mouse only) ================= */
+const state={dragging:null,ghost:null,offsetX:0,offsetY:0,currentOver:null};
+function pointerPos(e){return{x:e.clientX,y:e.clientY};}
 function makeDraggable(el,type){
-  const start=(e)=>{
+  if(isCoarse)return;
+  const start=e=>{
     if(el.classList.contains('matched'))return;
     e.preventDefault();
     const pos=pointerPos(e),rect=el.getBoundingClientRect();
@@ -837,9 +903,9 @@ function makeDraggable(el,type){
     ghost.classList.add('ghost');ghost.style.width=rect.width+'px';
     ghost.style.left=(pos.x-state.offsetX)+'px';ghost.style.top=(pos.y-state.offsetY)+'px';
     document.body.appendChild(ghost);state.ghost=ghost;
+    select(null);
   };
   el.addEventListener('mousedown',start);
-  el.addEventListener('touchstart',start,{passive:false});
 }
 function onMove(e){
   if(!state.dragging)return;
@@ -863,79 +929,76 @@ function onEnd(e){
   const drop=target&&target.closest?target.closest('.dz,.bank,.match-target,.wo-target'):null;
   const{el,type,origin}=state.dragging;
   if(type==='chip'){
-    if(drop&&drop.classList.contains('dz')&&!drop.classList.contains('dz-radio')){
-      const existing=drop.querySelector('.chip');
-      if(existing){existing.innerHTML=existing.dataset.word;origin.appendChild(existing);}
-      drop.appendChild(el);
-      el.innerHTML=el.dataset.word+' <span class="remove">×</span>';
-    }else if(drop&&drop.classList.contains('wo-target')){
-      drop.appendChild(el);
-      el.innerHTML=el.dataset.word;
-    }else if(drop&&drop.classList.contains('bank')){
-      drop.appendChild(el);el.innerHTML=el.dataset.word;
-    }else{origin.appendChild(el);}
+    if(drop&&drop.classList.contains('dz')&&!drop.classList.contains('dz-radio'))placeChip(drop,el);
+    else if(drop&&drop.classList.contains('wo-target')){drop.appendChild(el);el.innerHTML=el.dataset.word;}
+    else if(drop&&drop.classList.contains('bank')){drop.appendChild(el);el.innerHTML=el.dataset.word;}
+    else{origin.appendChild(el);el.innerHTML=el.dataset.word;}
   }else if(type==='match'){
-    if(drop&&drop.classList.contains('match-target')){
-      const label=drop.querySelector('.matched-label');
-      if(label&&label.dataset.word){
-        const prev=document.querySelector('.match-item[data-word="'+CSS.escape(label.dataset.word)+'"]');
-        if(prev)prev.classList.remove('matched');
-      }
-      label.dataset.word=el.dataset.word;
-      label.textContent=el.dataset.word+' ×';
-      label.style.display='inline-block';
-      drop.classList.add('filled');
-      el.classList.add('matched');
-    }else{el.classList.remove('matched');origin.appendChild(el);}
+    if(drop&&drop.classList.contains('match-target'))assignMatch(drop,el);
   }
   state.dragging=null;state.currentOver=null;
 }
 document.addEventListener('mousemove',onMove);
-document.addEventListener('touchmove',onMove,{passive:false});
 document.addEventListener('mouseup',onEnd);
-document.addEventListener('touchend',onEnd);
-document.addEventListener('touchcancel',onEnd);
 document.querySelectorAll('.chip').forEach(el=>makeDraggable(el,'chip'));
 document.querySelectorAll('.match-item').forEach(el=>makeDraggable(el,'match'));
 
-document.addEventListener('click',(e)=>{
+/* ================= TAP-TO-PLACE (universal: phone + mouse) ================= */
+document.addEventListener('click',e=>{
   if(e.target.classList.contains('remove')){
-    const chip=e.target.closest('.chip'),card=chip.closest('.card');
-    chip.innerHTML=chip.dataset.word;
-    card.querySelector('.bank').appendChild(chip);
-  }
-  if(e.target.classList.contains('chip')&&e.target.parentElement.classList.contains('wo-target')){
-    const chip=e.target,wo=chip.closest('.wordorder');
-    wo.querySelector('.wo-bank').appendChild(chip);
+    const chip=e.target.closest('.chip');
+    returnChip(chip,chip.parentElement);
+    return;
   }
   if(e.target.classList.contains('matched-label')){
-    const t=e.target.closest('.match-target');
-    const word=e.target.dataset.word;
-    const item=document.querySelector('.match-item[data-word="'+CSS.escape(word)+'"]');
-    if(item)item.classList.remove('matched');
-    e.target.textContent='';e.target.style.display='none';delete e.target.dataset.word;
-    t.classList.remove('filled');
+    unmatch(e.target.closest('.match-target'));
+    return;
   }
   if(e.target.classList.contains('option')){
     const opt=e.target,sent=opt.closest('.sentence');
     sent.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
     opt.classList.add('selected');
     sent.querySelector('.dz-radio').dataset.selected=opt.dataset.value;
+    return;
+  }
+  const chip=e.target.closest('.chip');
+  if(chip){
+    const parent=chip.parentElement;
+    if(parent.classList.contains('bank')||parent.classList.contains('wo-bank')){
+      select(chip.classList.contains('selected')?null:chip);
+      return;
+    }
+    if(parent.classList.contains('dz')||parent.classList.contains('wo-target')){
+      returnChip(chip,parent);
+      return;
+    }
+  }
+  const mitem=e.target.closest('.match-item');
+  if(mitem){
+    select(mitem.classList.contains('selected')?null:mitem);
+    return;
+  }
+  if(selected){
+    const dz=e.target.closest('.dz');
+    if(dz&&!dz.classList.contains('dz-radio')&&selected.classList.contains('chip')){placeChip(dz,selected);return;}
+    const wot=e.target.closest('.wo-target');
+    if(wot&&selected.classList.contains('chip')){wot.appendChild(selected);selected.innerHTML=selected.dataset.word;select(null);return;}
+    const mt=e.target.closest('.match-target');
+    if(mt&&selected.classList.contains('match-item')){assignMatch(mt,selected);return;}
   }
 });
 
 /* ================= EVALUATION ================= */
-const norm=s=>(s||'').trim().toLowerCase();
 const cardResults={};
-
 function clearCard(card){
   card.querySelectorAll('.dz,.hint-input,.option,.match-target,.chip,.blank,.wordorder,.wo-target').forEach(el=>el.classList.remove('correct','incorrect','answer-revealed'));
+  card.querySelectorAll('.chip.selected,.match-item.selected').forEach(el=>el.classList.remove('selected'));
+  if(selected&&card.contains(selected))selected=null;
   card.querySelectorAll('.answer-key').forEach(el=>el.remove());
   card.classList.remove('correct','incorrect','show-answers');
   const btn=card.querySelector('.btn-showanswers');
   if(btn){btn.classList.remove('active');btn.textContent='👁 Show answers';}
 }
-
 function evaluateCard(card){
   clearCard(card);
   let correct=0,total=0;
@@ -993,8 +1056,6 @@ function evaluateCard(card){
   if(sc){sc.textContent='✓ '+correct+' / '+total;sc.className='card-score '+(correct===total?'good':'bad');}
   updateGlobal();
 }
-
-/* ================= SHOW / HIDE ANSWERS ================= */
 function showAnswers(card){
   hideAnswers(card);
   const task=card.dataset.task;
@@ -1043,22 +1104,13 @@ function hideAnswers(card){
   card.querySelectorAll('.answer-revealed').forEach(el=>el.classList.remove('answer-revealed'));
   card.classList.remove('show-answers');
 }
-
 function resetCard(card){
   clearCard(card);
-  card.querySelectorAll('.dz .chip').forEach(chip=>{chip.innerHTML=chip.dataset.word;card.querySelector('.bank').appendChild(chip);});
-  card.querySelectorAll('.wo-target .chip').forEach(chip=>{chip.closest('.wordorder').querySelector('.wo-bank').appendChild(chip);});
+  card.querySelectorAll('.dz .chip').forEach(chip=>returnChip(chip,chip.parentElement));
+  card.querySelectorAll('.wo-target .chip').forEach(chip=>returnChip(chip,chip.parentElement));
   card.querySelectorAll('.dz-radio').forEach(dz=>{delete dz.dataset.selected;});
   card.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
-  card.querySelectorAll('.match-target').forEach(mt=>{
-    const label=mt.querySelector('.matched-label');
-    if(label&&label.dataset.word){
-      const item=card.querySelector('.match-item[data-word="'+CSS.escape(label.dataset.word)+'"]');
-      if(item)item.classList.remove('matched');
-      label.textContent='';label.style.display='none';delete label.dataset.word;
-    }
-    mt.classList.remove('filled');
-  });
+  card.querySelectorAll('.match-target').forEach(mt=>unmatch(mt));
   card.querySelectorAll('.hint-input input').forEach(i=>i.value='');
   card.querySelectorAll('input.blank').forEach(i=>{i.value='';});
   delete cardResults[card.dataset.id];
@@ -1072,7 +1124,6 @@ function updateGlobal(){
   document.getElementById('progressFill').style.width=(t?Math.round(c/t*100):0)+'%';
 }
 function getCard(id){return document.querySelector('.card[data-id="'+id+'"]');}
-
 document.querySelectorAll('.btn-check').forEach(b=>b.addEventListener('click',()=>evaluateCard(getCard(b.dataset.card))));
 document.querySelectorAll('.btn-resetcard').forEach(b=>b.addEventListener('click',()=>resetCard(getCard(b.dataset.card))));
 document.querySelectorAll('.btn-showanswers').forEach(b=>{
@@ -1089,7 +1140,6 @@ document.querySelectorAll('.btn-showanswers').forEach(b=>{
     }
   });
 });
-
 const banner=document.getElementById('resultBanner');
 document.getElementById('checkBtn').addEventListener('click',()=>{
   let c=0,t=0;
@@ -1104,7 +1154,6 @@ document.getElementById('checkBtn').addEventListener('click',()=>{
     :'💪 Keep going! '+c+'/'+t+' — use "Show answers" to check the correct ones.';
   banner.scrollIntoView({behavior:'smooth',block:'center'});
 });
-
 const showAllBtn=document.getElementById('showAllBtn');
 showAllBtn.addEventListener('click',()=>{
   const anyShown=[...document.querySelectorAll('.card.show-answers')].length>0;
@@ -1121,7 +1170,6 @@ showAllBtn.addEventListener('click',()=>{
   if(anyShown){showAllBtn.classList.remove('active');showAllBtn.textContent='👁 Show all answers';}
   else{showAllBtn.classList.add('active');showAllBtn.textContent='👁 Hide all answers';}
 });
-
 document.getElementById('resetBtn').addEventListener('click',()=>{
   if(!confirm('Reset all answers?'))return;
   document.querySelectorAll('.card[data-task]').forEach(resetCard);
@@ -1129,7 +1177,6 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
   showAllBtn.classList.remove('active');
   showAllBtn.textContent='👁 Show all answers';
 });
-
 document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{
   e.preventDefault();
   document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
