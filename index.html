@@ -35,17 +35,18 @@
   .progress-fill { height:100%; background:linear-gradient(90deg,var(--purple),var(--teal)); width:0%; transition:width .5s ease; }
   .score-badge { background:var(--purple); color:#fff; padding:4px 11px; border-radius:999px; font-weight:800; font-size:12px; white-space:nowrap; }
 
-  /* ===== COVER CARD (как на макете) ===== */
-    .cover-wrap { padding:26px 20px 8px; }
+  /* ===== COVER CARD: 62% image / 38% text ===== */
+  .cover-wrap { padding:18px 20px 8px; }
   .cover-card { max-width:860px; margin:0 auto; background:#fff; border-radius:22px; overflow:hidden;
-    border:1px solid var(--purple-light); box-shadow:0 12px 36px rgba(124,107,184,.14); }
-  .cover-img { height:215px; background:#f3efe6; }
-  .cover-img img { object-position:center 48%; }
+    border:1px solid var(--purple-light); box-shadow:0 12px 36px rgba(124,107,184,.14);
+    height:385px; display:flex; flex-direction:column; }
+  .cover-img { height:62%; background:#f3efe6; }
   .cover-img img { width:100%; height:100%; object-fit:cover; object-position:center 45%; display:block; }
-  .cover-text { padding:26px 24px 32px; text-align:center; background:#fbfbfd; }
-  .cover-brand { color:var(--teal); font-weight:800; font-size:19px; letter-spacing:4px; text-transform:uppercase; }
-  .cover-text h1 { color:var(--purple); font-size:46px; font-weight:800; line-height:1.12; margin:8px 0 8px; }
-  .cover-text p { color:#8a8798; font-size:17px; }
+  .cover-text { height:38%; display:flex; flex-direction:column; justify-content:center; gap:5px;
+    padding:10px 24px; text-align:center; background:#fbfbfd; }
+  .cover-brand { color:var(--teal); font-weight:800; font-size:15px; letter-spacing:3px; text-transform:uppercase; }
+  .cover-text h1 { color:var(--purple); font-size:38px; font-weight:800; line-height:1.1; margin:0; }
+  .cover-text p { color:#8a8798; font-size:15px; margin:0; }
 
   .container { max-width:900px; margin:0 auto; padding:22px 20px; }
   .section { margin-bottom:44px; scroll-margin-top:100px; position:relative; }
@@ -187,7 +188,7 @@
   details.text-details .sub { font-weight:900; color:var(--ink); margin:12px 0 6px; font-size:14px; }
   b.v { color:var(--purple); }
 
-  /* ===== FLOATING PILL ACTION BAR (как на макете) ===== */
+  /* ===== FLOATING PILL ACTION BAR ===== */
   .actions { position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
     background:#fff; border-radius:999px; padding:8px;
     display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;
@@ -229,9 +230,10 @@
     .section-title { font-size:20px; }
     .card h3 { font-size:15px; }
     .sentence { font-size:14px; line-height:2.2; }
-    .cover-img { height:140px; }
-    .cover-text h1 { font-size:30px; }
-    .cover-text p { font-size:15px; }
+    .cover-card { height:270px; }
+    .cover-brand { font-size:12px; letter-spacing:2px; }
+    .cover-text h1 { font-size:26px; }
+    .cover-text p { font-size:13px; }
   }
 </style>
 </head>
@@ -883,7 +885,7 @@ function unmatch(mt){
 const state={dragging:null,ghost:null,offsetX:0,offsetY:0,currentOver:null};
 function pointerPos(e){return{x:e.clientX,y:e.clientY};}
 function makeDraggable(el,type){
-  if(isCoarse)return;
+  if(isCoarse)return;               // мобильные: только тап-режим
   const start=e=>{
     if(el.classList.contains('matched'))return;
     e.preventDefault();
@@ -935,7 +937,7 @@ document.addEventListener('mouseup',onEnd);
 document.querySelectorAll('.chip').forEach(el=>makeDraggable(el,'chip'));
 document.querySelectorAll('.match-item').forEach(el=>makeDraggable(el,'match'));
 
-/* ================= TAP-TO-PLACE (universal) ================= */
+/* ================= TAP-TO-PLACE (mobile) ================= */
 document.addEventListener('click',e=>{
   if(e.target.classList.contains('remove')){
     const chip=e.target.closest('.chip');
