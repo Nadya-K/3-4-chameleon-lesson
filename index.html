@@ -213,7 +213,7 @@
   .footer .foot-emblem { height:170px; width:auto; margin:0 auto 6px; display:block; }
   .footer .copy { font-size:14px; color:#9a93b5; }
 
-  /* ===== MOBILE ===== */
+  /* ===== MOBILE: tap-to-place sizes ===== */
   @media (pointer:coarse){
     .chip { padding:10px 16px; font-size:14px; }
     .match-item { padding:12px 14px; font-size:14px; }
@@ -224,9 +224,7 @@
     .hint-input input { min-width:120px; font-size:15px; }
     .btn { padding:12px 22px; font-size:14px; }
     .btn-small { padding:9px 16px; font-size:13px; }
-    .actions .btn { padding:12px 18px; font-size:13.5px; }
     .wo-target { min-height:56px; }
-    .nav a { font-size:13px; padding:6px 14px; }
     .section-title { font-size:20px; }
     .card h3 { font-size:15px; }
     .sentence { font-size:14px; line-height:2.2; }
@@ -234,6 +232,24 @@
     .cover-brand { font-size:12px; letter-spacing:2px; }
     .cover-text h1 { font-size:26px; }
     .cover-text p { font-size:13px; }
+  }
+
+  /* ===== MOBILE: one-line scrollable nav & action bar ===== */
+  @media (max-width:760px){
+    .header { padding:8px 12px; gap:8px; }
+    .brand { order:1; }
+    .progress-wrap { order:2; margin-left:auto; }
+    .progress-bar { width:80px; }
+    .nav { order:3; width:100%; flex:0 0 100%; flex-wrap:nowrap; justify-content:flex-start;
+      overflow-x:auto; padding:2px 0 6px; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    .nav::-webkit-scrollbar { display:none; }
+    .nav a { flex:0 0 auto; font-size:12.5px; padding:6px 14px; }
+    .actions { flex-wrap:nowrap; justify-content:flex-start; overflow-x:auto;
+      max-width:calc(100vw - 16px); padding:6px; gap:6px;
+      scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    .actions::-webkit-scrollbar { display:none; }
+    .actions .btn { flex:0 0 auto; padding:10px 16px; font-size:12.5px; white-space:nowrap; }
+    .actions .ic { width:14px; height:14px; }
   }
 </style>
 </head>
