@@ -1194,5 +1194,109 @@ document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{
   document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
 }));
 </script>
+  <!-- ===== НАЧАЛО БЛОКА ЗАЩИТЫ SUPABASE ===== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+  // ⚙️ ВАШИ НАСТРОЙКИ (уже заполнены)
+  var SUPABASE_URL = 'https://fspzpsljtvukfsvaseoe.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_nZMUx8WIuJZfcTILNMbF0A_2RRpE1S1';
+  var SITE_NAME = 'chameleon-lesson'; // имя ЭТОГО сайта (не меняйте, если не уверены)
+
+  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 1. Сразу прячем ВСЮ страницу (и контент, и картинки — всё)
+  document.body.style.visibility = 'hidden';
+
+  // 2. Показываем поверх белое окно входа
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'visibility:visible;position:fixed;top:0;left:0;right:0;bottom:0;background:#ffffff;z-index:999999;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;';
+  overlay.innerHTML =
+    '<div style="max-width:420px;width:90%;padding:30px;border:1px solid #ddd;border-radius:12px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.1);background:#fff;">' +
+    '<h2 style="margin-top:0;">🔐 Закрытый раздел</h2>' +
+    '<p id="auth-msg" style="color:#666;">Введите email — пришлём ссылку для входа</p>' +
+    '<input id="auth-email" type="email" placeholder="ваш@email.com" style="width:100%;box-sizing:border-box;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:6px;font-size:16px;">' +
+    '<button id="auth-btn" style="width:100%;padding:12px;background:#3ecf8e;color:#fff;border:none;border-radius:6px;font-size:16px;cursor:pointer;">Получить ссылку на почту</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+
+  var msg = overlay.querySelector('#auth-msg');
+  var emailInput = overlay.querySelector('#auth-email');
+  var btn = overlay.querySelector('#auth-btn');
+
+  // Кнопка "Получить ссылку"
+  btn.onclick = function () {
+    var email = emailInput.value.trim();
+    if (!email || email.indexOf('@') === -1) {
+      msg.textContent = 'Введите корректный email';
+      msg.style.color = 'red';
+      return;
+    }
+    msg.textContent = 'Отправляем письмо…';
+    msg.style.color = '#666';
+    supabase.auth.signInWithOtp({
+      email: email,
+      options: { emailRedirectTo: window.location.href }
+    }).then(function (res) {
+      if (res.error) {
+        msg.textContent = 'Ошибка: ' + res.error.message;
+        msg.style.color = 'red';
+      } else {
+        msg.textContent = '✅ Ссылка отправлена! Проверьте почту (и папку «Спам»).';
+        msg.style.color = 'green';
+        emailInput.style.display = 'none';
+        btn.style.display = 'none';
+      }
+    });
+  };
+
+  // Экран "Доступ запрещён"
+  function showDenied() {
+    overlay.querySelector('div').innerHTML =
+      '<h2 style="color:#d33;">❌ Доступ запрещён</h2>' +
+      '<p>У этой почты нет прав на данный сайт.</p>' +
+      '<button id="auth-retry" style="padding:10px 20px;border:none;border-radius:6px;background:#666;color:#fff;cursor:pointer;">Войти под другой почтой</button>';
+    overlay.querySelector('#auth-retry').onclick = function () {
+      supabase.auth.signOut().then(function () { location.reload(); });
+    };
+  }
+
+  // Открываем сайт, если доступ есть
+  function openSite() {
+    overlay.remove();
+    document.body.style.visibility = '';
+  }
+
+  // Проверка: вошёл ли пользователь и есть ли у него право на этот сайт
+  function check() {
+    supabase.auth.getSession().then(function (r) {
+      var session = r.data.session;
+      if (!session) return; // не вошёл — остаётся окно входа
+      var userId = session.user.id;
+      return supabase
+        .from('site_access')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('site_name', SITE_NAME)
+        .limit(1)
+        .then(function (res) {
+          if (res.data && res.data.length > 0) {
+            openSite();      // доступ ЕСТЬ → показываем сайт
+          } else {
+            showDenied();    // доступа НЕТ → красный экран
+          }
+        });
+    });
+  }
+
+  // Если пользователь кликнул по ссылке из письма — проверяем доступ
+  supabase.auth.onAuthStateChange(function (event) {
+    if (event === 'SIGNED_IN') check();
+  });
+
+  check();
+})();
+</script>
+<!-- ===== КОНЕЦ БЛОКА ЗАЩИТЫ SUPABASE ===== -->
 </body>
 </html>
