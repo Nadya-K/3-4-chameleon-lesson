@@ -1,0 +1,9 @@
+name: Keep Supabase Alive
+on:
+  schedule:
+    - cron: '0 0 */6 * *'  # каждые 6 дней
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -s https://fspzpsljtvukfsvaseoe.supabase.co/rest/v1/ | head -1
