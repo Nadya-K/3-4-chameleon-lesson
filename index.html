@@ -166,7 +166,6 @@
   .dz.correct { background: #e8f5e8; border-color: var(--success); border-style: solid; }
   .dz.incorrect { background: #fbe9e7; border-color: var(--error); border-style: solid; }
 
-  /* ===== DROPDOWN SELECT STYLES ===== */
   .select-wrap { display: inline-flex; align-items: center; margin: 0 4px; vertical-align: middle; }
   .select-wrap select {
     appearance: none; -webkit-appearance: none; -moz-appearance: none;
@@ -384,7 +383,7 @@
 
 <div class="cover-wrap">
   <div class="cover-card">
-    <div class="cover-img"><img src="img-cover.png" alt="The Chameleon Effect — watercolor cover"></div>
+    <div class="cover-img"><img src="img-cover.png" alt="The Chameleon Effect — cover"></div>
     <div class="cover-text">
       <span class="cover-brand">Advanced Booster</span>
       <h1>The Chameleon Effect</h1>
@@ -496,8 +495,8 @@
     </div>
 
     <div class="card" data-task="dragfill" data-id="v2-3">
-      <h3>2.3 Fill in the gaps — drag the words</h3>
-      <div class="instruction">💡 Drag each word from the bank into the correct gap (or tap the word, then tap the gap). Click × on a chip to return it.</div>
+      <h3>2.3 Fill in the gaps — drag or click the words</h3>
+      <div class="instruction">💡 Drag each word from the bank into the correct gap, or click the word and then click the gap. Click × on a chip to return it.</div>
       <div class="bank">
         <div class="chip" data-word="well-received">well-received</div>
         <div class="chip" data-word="likeability">likeability</div>
@@ -530,7 +529,7 @@
 
     <div class="card" data-task="match" data-id="v2-4">
       <h3>2.4 Match the parts of collocations</h3>
-      <div class="instruction">💡 Drag each ending to the matching word (or tap the word, then tap the definition). Click the coral label to unmatch.</div>
+      <div class="instruction">💡 Drag each ending to the matching word, or click the word and then click the definition. Click the coral label to unmatch.</div>
       <div class="match-grid">
         <div class="match-col">
           <h4>Word</h4>
@@ -579,8 +578,8 @@
     </div>
 
     <div class="card" data-task="dragfill" data-id="v2-6">
-      <h3>2.6 Fill in the gaps — drag the phrases</h3>
-      <div class="instruction">💡 Drag each phrase from the bank into the correct gap (or tap the phrase, then tap the gap). Click × on a chip to return it.</div>
+      <h3>2.6 Fill in the gaps — drag or click the phrases</h3>
+      <div class="instruction">💡 Drag each phrase from the bank into the correct gap, or click the phrase and then click the gap. Click × on a chip to return it.</div>
       <div class="bank">
         <div class="chip" data-word="be heightened">be heightened</div>
         <div class="chip" data-word="go unnoticed">go unnoticed</div>
@@ -682,7 +681,7 @@
 
     <div class="card" data-task="wordorder" data-id="r4-2">
       <h3>4.2 Put the words into correct order — build each sentence</h3>
-      <div class="instruction">💡 Drag the words from the bank into the empty area in the correct order (or tap a word, then tap the target area). Click a word in the answer area to send it back.</div>
+      <div class="instruction">💡 Drag the words from the bank into the empty area in the correct order, or click a word and then click the target area. Click a word in the answer area to send it back.</div>
 
       <div class="wordorder" data-answer="Moving|to|a different|country|drastically|changed|her outlook|on|life.">
         <span class="wo-num">1.</span>
@@ -792,7 +791,7 @@
 
     <div class="card" data-task="match" data-id="r4-3">
       <h3>4.3 Match the vocabulary to its definition</h3>
-      <div class="instruction">💡 Drag each word/phrase to the correct definition (or tap a word, then tap its definition). Click the coral label to unmatch.</div>
+      <div class="instruction">💡 Drag each word/phrase to the correct definition, or click a word and then click its definition. Click the coral label to unmatch.</div>
       <div class="match-grid">
         <div class="match-col">
           <h4>Word / phrase</h4>
@@ -957,14 +956,20 @@ function unmatch(mt){
   mt.classList.remove('filled');
 }
 
-const state={dragging:null,ghost:null,offsetX:0,offsetY:0,currentOver:null};
+// Updated state to track drag threshold
+const state={dragging:null, ghost:null, offsetX:0, offsetY:0, currentOver:null, isDragging:false, startX:0, startY:0};
+
 function pointerPos(e){return{x:e.clientX,y:e.clientY};}
+
 function makeDraggable(el,type){
-  if(isCoarse)return;
+  if(isCoarse)return; // On mobile, rely solely on the click handler
   const start=e=>{
     if(el.classList.contains('matched'))return;
-    e.preventDefault();
-    const pos=pointerPos(e),rect=el.getBoundingClientRect();
+    state.startX = e.clientX;
+    state.startY = e.clientY;
+    state.isDragging = false;
+    
+    const pos={x:e.clientX,y:e.clientY},rect=el.getBoundingClientRect();
     state.offsetX=pos.x-rect.left;state.offsetY=pos.y-rect.top;
     state.dragging={el,type,origin:el.parentElement};
     el.classList.add('dragging');
@@ -976,19 +981,38 @@ function makeDraggable(el,type){
   };
   el.addEventListener('mousedown',start);
 }
+
 function onMove(e){
   if(!state.dragging)return;
-  e.preventDefault();
-  const pos=pointerPos(e);
-  if(state.ghost){state.ghost.style.left=(pos.x-state.offsetX)+'px';state.ghost.style.top=(pos.y-state.offsetY)+'px';state.ghost.style.display='none';}
-  const target=document.elementFromPoint(pos.x,pos.y);
-  if(state.ghost)state.ghost.style.display='';
-  if(state.currentOver)state.currentOver.classList.remove('drag-over');
-  const drop=target&&target.closest?target.closest('.dz,.bank,.match-target,.wo-target'):null;
-  if(drop){drop.classList.add('drag-over');state.currentOver=drop;}else state.currentOver=null;
+  // Check if it's an actual drag (moved more than 5px)
+  if (!state.isDragging && (Math.abs(e.clientX - state.startX) > 5 || Math.abs(e.clientY - state.startY) > 5)) {
+    state.isDragging = true;
+  }
+  
+  if (state.isDragging) {
+    e.preventDefault(); // Prevent text selection/scroll only when actually dragging
+    const pos=pointerPos(e);
+    if(state.ghost){state.ghost.style.left=(pos.x-state.offsetX)+'px';state.ghost.style.top=(pos.y-state.offsetY)+'px';state.ghost.style.display='none';}
+    const target=document.elementFromPoint(pos.x,pos.y);
+    if(state.ghost)state.ghost.style.display='';
+    if(state.currentOver)state.currentOver.classList.remove('drag-over');
+    const drop=target&&target.closest?target.closest('.dz,.bank,.match-target,.wo-target'):null;
+    if(drop){drop.classList.add('drag-over');state.currentOver=drop;}else state.currentOver=null;
+  }
 }
+
 function onEnd(e){
   if(!state.dragging)return;
+  
+  // If it was just a click (not a drag), clean up and let the click event handler handle it
+  if (!state.isDragging) {
+    if(state.ghost) { state.ghost.remove(); state.ghost = null; }
+    state.dragging.el.classList.remove('dragging');
+    state.dragging = null;
+    return;
+  }
+  
+  // Actual drag end logic
   const pos=pointerPos(e);
   if(state.ghost)state.ghost.style.display='none';
   const target=document.elementFromPoint(pos.x,pos.y);
@@ -1007,6 +1031,7 @@ function onEnd(e){
   }
   state.dragging=null;state.currentOver=null;
 }
+
 document.addEventListener('mousemove',onMove);
 document.addEventListener('mouseup',onEnd);
 document.querySelectorAll('.chip').forEach(el=>makeDraggable(el,'chip'));
